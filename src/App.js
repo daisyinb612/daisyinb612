@@ -2,6 +2,7 @@ import React from "react";
 import htm from "htm";
 import {
   ImageBackground,
+  Image,
   Linking,
   Pressable,
   ScrollView,
@@ -14,6 +15,7 @@ import { profile } from "./profile.js";
 
 const html = htm.bind(React.createElement);
 const heroImage = new URL("../assets/academic-hero.png", import.meta.url).href;
+const avatarImage = new URL("../assets/profile-avatar.jpg", import.meta.url).href;
 
 function openUrl(url) {
   Linking.openURL(url).catch(() => {});
@@ -104,25 +106,35 @@ function Hero({ compact }) {
       imageStyle=${styles.heroImage}
     >
       <${View} style=${styles.heroShade}>
-        <${View} style=${styles.heroInner}>
-          <${Text} style=${styles.kicker}>${profile.eyebrow}</${Text}>
-          <${Text}
-            accessibilityRole="header"
-            style=${[styles.heroTitle, compact ? styles.heroTitleCompact : null]}
-          >
-            ${profile.name}
-          </${Text}>
-          <${Text} style=${styles.heroSubtitle}>${profile.role}</${Text}>
-          <${Text} style=${styles.heroMeta}>
-            ${profile.affiliation} | ${profile.location}
-          </${Text}>
-          <${Text} style=${[styles.heroCopy, compact ? styles.heroCopyCompact : null]}>
-            ${profile.summary}
-          </${Text}>
-          <${View} style=${styles.heroActions}>
-            ${profile.links.map(
-              (item) => html`<${LinkButton} key=${item.label} item=${item} />`,
-            )}
+        <${View} style=${[styles.heroInner, compact ? styles.heroInnerCompact : null]}>
+          <${View} style=${styles.heroContent}>
+            <${Text} style=${styles.kicker}>${profile.eyebrow}</${Text}>
+            <${Text}
+              accessibilityRole="header"
+              style=${[styles.heroTitle, compact ? styles.heroTitleCompact : null]}
+            >
+              ${profile.name}
+            </${Text}>
+            <${Text} style=${styles.heroSubtitle}>${profile.role}</${Text}>
+            <${Text} style=${styles.heroMeta}>
+              ${profile.affiliation} | ${profile.location}
+            </${Text}>
+            <${Text} style=${[styles.heroCopy, compact ? styles.heroCopyCompact : null]}>
+              ${profile.summary}
+            </${Text}>
+            <${View} style=${styles.heroActions}>
+              ${profile.links.map(
+                (item) => html`<${LinkButton} key=${item.label} item=${item} />`,
+              )}
+            </${View}>
+          </${View}>
+          <${View} style=${[styles.avatarShell, compact ? styles.avatarShellCompact : null]}>
+            <${Image}
+              accessibilityLabel=${`${profile.name} portrait`}
+              resizeMode="cover"
+              source=${{ uri: avatarImage }}
+              style=${[styles.avatarImage, compact ? styles.avatarImageCompact : null]}
+            />
           </${View}>
         </${View}>
       </${View}>
@@ -376,6 +388,41 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     paddingHorizontal: 24,
     paddingVertical: 72,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 36,
+  },
+  heroInnerCompact: {
+    flexDirection: "column-reverse",
+    alignItems: "flex-start",
+    paddingVertical: 54,
+  },
+  heroContent: {
+    flex: 1,
+    maxWidth: 760,
+  },
+  avatarShell: {
+    width: 184,
+    height: 184,
+    borderRadius: 92,
+    borderWidth: 4,
+    borderColor: "rgba(255, 255, 255, 0.72)",
+    overflow: "hidden",
+    backgroundColor: "rgba(255, 255, 255, 0.18)",
+  },
+  avatarShellCompact: {
+    width: 132,
+    height: 132,
+    borderRadius: 66,
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+  },
+  avatarImageCompact: {
+    width: "100%",
+    height: "100%",
   },
   kicker: {
     alignSelf: "flex-start",
