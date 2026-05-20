@@ -1,7 +1,6 @@
 import React from "react";
 import htm from "htm";
 import {
-  ImageBackground,
   Image,
   Linking,
   Pressable,
@@ -14,7 +13,6 @@ import {
 import { profile } from "./profile.js";
 
 const html = htm.bind(React.createElement);
-const heroImage = new URL("../assets/academic-hero.png", import.meta.url).href;
 const avatarImage = new URL("../assets/profile-avatar.jpg", import.meta.url).href;
 
 function openUrl(url) {
@@ -28,751 +26,513 @@ function scrollToSection(id) {
   }
 }
 
-function LinkButton({ item }) {
-  const isPrimary = item.variant === "primary";
+function ExternalLink({ label, url }) {
   return html`
-    <${Pressable}
-      accessibilityRole="link"
-      onPress=${() => openUrl(item.url)}
-      style=${[
-        styles.linkButton,
-        isPrimary ? styles.linkButtonPrimary : styles.linkButtonSecondary,
-      ]}
-    >
-      <${Text}
-        style=${[
-          styles.linkButtonText,
-          isPrimary ? styles.linkButtonTextPrimary : styles.linkButtonTextSecondary,
-        ]}
-      >
-        ${item.label}
-      </${Text}>
+    <${Pressable} accessibilityRole="link" onPress=${() => openUrl(url)}>
+      <${Text} style=${styles.inlineLink}>${label}</${Text}>
     </${Pressable}>
   `;
 }
 
-function NavItem({ id, label }) {
+function TopNav({ compact }) {
   return html`
-    <${Pressable} onPress=${() => scrollToSection(id)} style=${styles.navItem}>
-      <${Text} style=${styles.navText}>${label}</${Text}>
-    </${Pressable}>
-  `;
-}
-
-function Navigation({ compact }) {
-  const items = [
-    ["research", "Research"],
-    ["publications", "Publications"],
-    ["projects", "Projects"],
-    ["contact", "Contact"],
-  ];
-
-  return html`
-    <${View} style=${[styles.nav, compact ? styles.navCompact : null]}>
-      <${View}>
-        <${Text} style=${styles.navName}>${profile.name}</${Text}>
-        <${Text} style=${styles.navRole}>${profile.eyebrow}</${Text}>
+    <${View} style=${styles.masthead}>
+      <${View} style=${[styles.mastheadInner, compact ? styles.mastheadInnerCompact : null]}>
+        <${Pressable} onPress=${() => scrollToSection("about")}>
+          <${Text} style=${styles.siteTitle}>${profile.siteTitle}</${Text}>
+        </${Pressable}>
+        <${View} style=${[styles.navLinks, compact ? styles.navLinksCompact : null]}>
+          ${profile.nav.map(
+            (item) => html`
+              <${Pressable} key=${item.id} onPress=${() => scrollToSection(item.id)}>
+                <${Text} style=${styles.navLink}>${item.label}</${Text}>
+              </${Pressable}>
+            `,
+          )}
+        </${View}>
       </${View}>
-      <${View} style=${[styles.navLinks, compact ? styles.navLinksCompact : null]}>
-        ${items.map(
-          ([id, label]) => html`<${NavItem} key=${id} id=${id} label=${label} />`,
+    </${View}>
+  `;
+}
+
+function Sidebar({ compact }) {
+  return html`
+    <${View} style=${[styles.sidebar, compact ? styles.sidebarCompact : null]}>
+      <${View} style=${styles.avatarWrap}>
+        <${Image}
+          accessibilityLabel=${`${profile.name} portrait`}
+          resizeMode="cover"
+          source=${{ uri: avatarImage }}
+          style=${styles.avatar}
+        />
+      </${View}>
+      <${View} style=${styles.authorBlock}>
+        <${Text} style=${styles.authorName}>${profile.name}</${Text}>
+        <${Text} style=${styles.authorRole}>${profile.role}</${Text}>
+        <${Text} style=${styles.authorBio}>${profile.affiliation}</${Text}>
+        <${Text} style=${styles.authorBio}>${profile.lab}</${Text}>
+      </${View}>
+      <${View} style=${styles.contactList}>
+        <${Text} style=${styles.contactText}>Shanghai, China</${Text}>
+        <${Pressable} onPress=${() => openUrl(`mailto:${profile.email}`)}>
+          <${Text} style=${styles.contactLink}>${profile.email}</${Text}>
+        </${Pressable}>
+        <${Text} style=${styles.contactText}>${profile.phone}</${Text}>
+        <${ExternalLink} label="Google Scholar" url=${profile.scholar} />
+        <${ExternalLink} label="GitHub" url=${profile.github} />
+      </${View}>
+    </${View}>
+  `;
+}
+
+function Section({ id, title, children }) {
+  return html`
+    <${View} nativeID=${id} style=${styles.section}>
+      <${Text} accessibilityRole="header" style=${styles.sectionTitle}>${title}</${Text}>
+      <${View} style=${styles.sectionRule} />
+      ${children}
+    </${View}>
+  `;
+}
+
+function EducationItem({ item }) {
+  return html`
+    <${View} style=${styles.timelineItem}>
+      <${View} style=${styles.timelineMain}>
+        <${Text} style=${styles.itemTitle}>${item.school}</${Text}>
+        <${Text} style=${styles.itemSubtitle}>${item.degree}</${Text}>
+        <${Text} style=${styles.bodyText}>${item.detail}</${Text}>
+      </${View}>
+      <${Text} style=${styles.itemPeriod}>${item.period}</${Text}>
+    </${View}>
+  `;
+}
+
+function Publication({ item }) {
+  return html`
+    <${View} style=${styles.pubItem}>
+      <${View} style=${styles.pubHeader}>
+        <${Text} style=${styles.pubTitle}>
+          <${Text} style=${styles.pubTag}>[${item.tag}] </${Text}>${item.title}
+        </${Text}>
+      </${View}>
+      <${Text} style=${styles.itemSubtitle}>${item.authors}</${Text}>
+      <${Text} style=${styles.venueText}>${item.venue}</${Text}>
+      ${item.links.length
+        ? html`
+            <${View} style=${styles.linkRow}>
+              ${item.links.map(
+                (link) => html`
+                  <${ExternalLink} key=${link.label} label=${link.label} url=${link.url} />
+                `,
+              )}
+            </${View}>
+          `
+        : null}
+      <${View} style=${styles.bulletList}>
+        ${item.bullets.map(
+          (bullet) => html`
+            <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
+          `,
         )}
       </${View}>
     </${View}>
   `;
 }
 
-function StatStrip({ compact }) {
-  return html`
-    <${View} style=${[styles.statStrip, compact ? styles.statStripCompact : null]}>
-      ${profile.stats.map(
-        (stat) => html`
-          <${View} key=${stat.label} style=${styles.statItem}>
-            <${Text} style=${styles.statValue}>${stat.value}</${Text}>
-            <${Text} style=${styles.statLabel}>${stat.label}</${Text}>
-          </${View}>
-        `,
-      )}
-    </${View}>
-  `;
-}
-
-function Hero({ compact }) {
-  return html`
-    <${ImageBackground}
-      source=${{ uri: heroImage }}
-      resizeMode="cover"
-      style=${[styles.hero, compact ? styles.heroCompact : null]}
-      imageStyle=${styles.heroImage}
-    >
-      <${View} style=${styles.heroShade}>
-        <${View} style=${[styles.heroInner, compact ? styles.heroInnerCompact : null]}>
-          <${View} style=${styles.heroContent}>
-            <${Text} style=${styles.kicker}>${profile.eyebrow}</${Text}>
-            <${Text}
-              accessibilityRole="header"
-              style=${[styles.heroTitle, compact ? styles.heroTitleCompact : null]}
-            >
-              ${profile.name}
-            </${Text}>
-            <${Text} style=${styles.heroSubtitle}>${profile.role}</${Text}>
-            <${Text} style=${styles.heroMeta}>
-              ${profile.affiliation} | ${profile.location}
-            </${Text}>
-            <${Text} style=${[styles.heroCopy, compact ? styles.heroCopyCompact : null]}>
-              ${profile.summary}
-            </${Text}>
-            <${View} style=${styles.heroActions}>
-              ${profile.links.map(
-                (item) => html`<${LinkButton} key=${item.label} item=${item} />`,
-              )}
-            </${View}>
-          </${View}>
-          <${View} style=${[styles.avatarShell, compact ? styles.avatarShellCompact : null]}>
-            <${Image}
-              accessibilityLabel=${`${profile.name} portrait`}
-              resizeMode="cover"
-              source=${{ uri: avatarImage }}
-              style=${[styles.avatarImage, compact ? styles.avatarImageCompact : null]}
-            />
-          </${View}>
-        </${View}>
-      </${View}>
-    </${ImageBackground}>
-  `;
-}
-
-function SectionHeading({ eyebrow, title, subtitle }) {
-  return html`
-    <${View} style=${styles.sectionHeading}>
-      <${Text} style=${styles.sectionEyebrow}>${eyebrow}</${Text}>
-      <${Text} accessibilityRole="header" style=${styles.sectionTitle}>${title}</${Text}>
-      <${Text} style=${styles.sectionSubtitle}>${subtitle}</${Text}>
-    </${View}>
-  `;
-}
-
-function Tag({ label }) {
-  return html`
-    <${View} style=${styles.tag}>
-      <${Text} style=${styles.tagText}>${label}</${Text}>
-    </${View}>
-  `;
-}
-
-function ResearchCard({ item, compact }) {
-  return html`
-    <${View} style=${[styles.card, compact ? styles.cardFull : styles.cardThird]}>
-      <${Text} style=${styles.cardTitle}>${item.title}</${Text}>
-      <${Text} style=${styles.cardDescription}>${item.description}</${Text}>
-      <${View} style=${styles.tagRow}>
-        ${item.tags.map((tag) => html`<${Tag} key=${tag} label=${tag} />`)}
-      </${View}>
-    </${View}>
-  `;
-}
-
-function PublicationItem({ item }) {
-  return html`
-    <${View} style=${styles.publication}>
-      <${View} style=${styles.publicationAccent} />
-      <${View} style=${styles.publicationBody}>
-        <${Text} style=${styles.publicationTitle}>${item.title}</${Text}>
-        <${Text} style=${styles.publicationAuthors}>${item.authors}</${Text}>
-        <${Text} style=${styles.publicationVenue}>${item.venue}</${Text}>
-        <${Text} style=${styles.publicationStatus}>${item.status}</${Text}>
-      </${View}>
-    </${View}>
-  `;
-}
-
-function ProjectItem({ item }) {
-  return html`
-    <${View} style=${styles.projectItem}>
-      <${Text} style=${styles.projectTitle}>${item.name}</${Text}>
-      <${Text} style=${styles.projectDetail}>${item.detail}</${Text}>
-    </${View}>
-  `;
-}
-
-function TimelineItem({ item }) {
+function ExperienceItem({ item }) {
   return html`
     <${View} style=${styles.timelineItem}>
-      <${Text} style=${styles.timelineYear}>${item.year}</${Text}>
-      <${View} style=${styles.timelineBody}>
-        <${Text} style=${styles.timelineTitle}>${item.title}</${Text}>
-        <${Text} style=${styles.timelineDetail}>${item.detail}</${Text}>
+      <${View} style=${styles.timelineMain}>
+        <${Text} style=${styles.itemTitle}>${item.title}</${Text}>
+        <${Text} style=${styles.itemSubtitle}>${item.org}</${Text}>
+        ${item.bullets.map(
+          (bullet) => html`
+            <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
+          `,
+        )}
       </${View}>
+      <${Text} style=${styles.itemPeriod}>${item.period}</${Text}>
+    </${View}>
+  `;
+}
+
+function SkillGroup({ item }) {
+  return html`
+    <${View} style=${styles.skillGroup}>
+      <${Text} style=${styles.skillTitle}>${item.title}</${Text}>
+      <${Text} style=${styles.bodyText}>${item.items.join(" · ")}</${Text}>
     </${View}>
   `;
 }
 
 export function App() {
   const { width } = useWindowDimensions();
-  const compact = width < 820;
+  const compact = width < 860;
 
   return html`
-    <${ScrollView} style=${styles.scroll} contentContainerStyle=${styles.page}>
-      <${Navigation} compact=${compact} />
-      <${Hero} compact=${compact} />
+    <${View} style=${styles.app}>
+      <${TopNav} compact=${compact} />
+      <${ScrollView} style=${styles.scroll} contentContainerStyle=${styles.page}>
+        <${View} style=${[styles.layout, compact ? styles.layoutCompact : null]}>
+          <${Sidebar} compact=${compact} />
+          <${View} style=${styles.article}>
+            <${Section} id="about" title="About">
+              <${Text} style=${styles.pageTitle}>${profile.name} / ${profile.englishName}</${Text}>
+              <${Text} style=${styles.leadText}>${profile.bio}</${Text}>
+              <${View} style=${styles.interestWrap}>
+                ${profile.interests.map(
+                  (interest) => html`
+                    <${View} key=${interest} style=${styles.interestPill}>
+                      <${Text} style=${styles.interestText}>${interest}</${Text}>
+                    </${View}>
+                  `,
+                )}
+              </${View}>
+            </${Section}>
 
-      <${View} style=${styles.content}>
-        <${StatStrip} compact=${compact} />
-
-        <${View} nativeID="research" style=${styles.section}>
-          <${SectionHeading}
-            eyebrow="Research"
-            title="Research Interests"
-            subtitle="A concise view of the themes, methods, and questions this homepage can foreground."
-          />
-          <${View} style=${[styles.cardGrid, compact ? styles.cardGridCompact : null]}>
-            ${profile.research.map(
-              (item) => html`
-                <${ResearchCard}
-                  key=${item.title}
-                  item=${item}
-                  compact=${compact}
-                />
-              `,
-            )}
-          </${View}>
-        </${View}>
-
-        <${View} nativeID="publications" style=${styles.section}>
-          <${SectionHeading}
-            eyebrow="Publications"
-            title="Selected Work"
-            subtitle="Keep the list selective, linkable, and easy for collaborators or committees to scan."
-          />
-          <${View} style=${styles.publicationList}>
-            ${profile.publications.map(
-              (item) => html`<${PublicationItem} key=${item.title} item=${item} />`,
-            )}
-          </${View}>
-        </${View}>
-
-        <${View}
-          nativeID="projects"
-          style=${[styles.sectionSplit, compact ? styles.sectionSplitCompact : null]}
-        >
-          <${View} style=${styles.splitColumn}>
-            <${SectionHeading}
-              eyebrow="Projects"
-              title="Current Projects"
-              subtitle="Highlight prototypes, datasets, field studies, or tools that help readers understand your work."
-            />
-            <${View} style=${styles.projectList}>
-              ${profile.projects.map(
-                (item) => html`<${ProjectItem} key=${item.name} item=${item} />`,
+            <${Section} id="education" title="Education">
+              ${profile.education.map(
+                (item) => html`<${EducationItem} key=${item.period} item=${item} />`,
               )}
-            </${View}>
-          </${View}>
-          <${View} style=${styles.splitColumn}>
-            <${SectionHeading}
-              eyebrow="Timeline"
-              title="Academic Path"
-              subtitle="Use this area for positions, degrees, awards, teaching, and service."
-            />
-            <${View} style=${styles.timeline}>
-              ${profile.timeline.map(
-                (item) => html`<${TimelineItem} key=${item.year + item.title} item=${item} />`,
-              )}
-            </${View}>
-          </${View}>
-        </${View}>
+            </${Section}>
 
-        <${View}
-          nativeID="contact"
-          style=${[styles.contactSection, compact ? styles.contactSectionCompact : null]}
-        >
-          <${View} style=${styles.contactCopy}>
-            <${Text} style=${styles.sectionEyebrow}>Contact</${Text}>
-            <${Text} style=${styles.contactTitle}>Let's connect</${Text}>
-            <${Text} style=${styles.contactText}>
-              For collaboration, research discussions, or academic opportunities, use the links below.
-            </${Text}>
-          </${View}>
-          <${View} style=${styles.contactLinks}>
-            ${profile.links.map(
-              (item) => html`<${LinkButton} key=${item.label} item=${item} />`,
-            )}
+            <${Section} id="research" title="Research Interests">
+              <${Text} style=${styles.bodyText}>
+                My current work studies how people collaborate with AI agents in learning,
+                writing, and decision-making contexts. I am especially interested in agentic
+                workflows that are transparent, controllable, and useful for real educational
+                practice.
+              </${Text}>
+            </${Section}>
+
+            <${Section} id="publications" title="Publications and Projects">
+              ${profile.publications.map(
+                (item) => html`<${Publication} key=${item.title} item=${item} />`,
+              )}
+            </${Section}>
+
+            <${Section} id="experience" title="Experience">
+              ${profile.experience.map(
+                (item) => html`<${ExperienceItem} key=${item.title} item=${item} />`,
+              )}
+            </${Section}>
+
+            <${Section} id="skills" title="Skills">
+              <${View} style=${styles.skillGrid}>
+                ${profile.skills.map(
+                  (item) => html`<${SkillGroup} key=${item.title} item=${item} />`,
+                )}
+              </${View}>
+              <${Text} style=${styles.honorText}>Honors: ${profile.honors.join("；")}</${Text}>
+            </${Section}>
           </${View}>
         </${View}>
-      </${View}>
-    </${ScrollView}>
+      </${ScrollView}>
+    </${View}>
   `;
 }
 
 const colors = {
-  ink: "#17202a",
-  muted: "#647083",
-  paper: "#ffffff",
-  line: "#dfe5ec",
-  teal: "#0d766e",
-  tealSoft: "#e3f4f2",
-  wine: "#8b2842",
-  gold: "#b7791f",
+  text: "#494e52",
+  lightText: "#7a8288",
+  link: "#2f7f93",
+  border: "#e6e8ea",
+  softBorder: "#f2f3f3",
+  background: "#ffffff",
+  page: "#ffffff",
+  pill: "#f2f8fa",
 };
 
 const styles = StyleSheet.create({
+  app: {
+    minHeight: "100vh",
+    backgroundColor: colors.background,
+  },
   scroll: {
     minHeight: "100vh",
-    backgroundColor: "#f6f7fb",
   },
-  page: {
-    minHeight: "100vh",
-  },
-  nav: {
+  masthead: {
     width: "100%",
-    maxWidth: 1180,
+    minHeight: 64,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.softBorder,
+    backgroundColor: "#ffffff",
+    zIndex: 10,
+  },
+  mastheadInner: {
+    width: "100%",
+    maxWidth: 1160,
     marginHorizontal: "auto",
     paddingHorizontal: 24,
     paddingVertical: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: 24,
   },
-  navCompact: {
+  mastheadInnerCompact: {
     alignItems: "flex-start",
-    gap: 16,
     flexDirection: "column",
+    gap: 12,
   },
-  navName: {
-    color: colors.ink,
+  siteTitle: {
+    color: colors.text,
     fontSize: 18,
     lineHeight: 24,
     fontWeight: "700",
-  },
-  navRole: {
-    color: colors.muted,
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 2,
   },
   navLinks: {
     flexDirection: "row",
+    gap: 18,
     alignItems: "center",
-    gap: 8,
   },
   navLinksCompact: {
     flexWrap: "wrap",
+    gap: 12,
   },
-  navItem: {
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  navText: {
-    color: colors.ink,
+  navLink: {
+    color: colors.lightText,
     fontSize: 14,
     lineHeight: 20,
     fontWeight: "600",
   },
-  hero: {
-    minHeight: 590,
-    width: "100%",
-  },
-  heroCompact: {
-    minHeight: 560,
-  },
-  heroImage: {
-    backgroundColor: "#142333",
-  },
-  heroShade: {
-    minHeight: "100%",
-    backgroundColor: "rgba(9, 18, 29, 0.56)",
-    justifyContent: "center",
-  },
-  heroInner: {
-    width: "100%",
-    maxWidth: 1180,
-    marginHorizontal: "auto",
-    paddingHorizontal: 24,
-    paddingVertical: 72,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 36,
-  },
-  heroInnerCompact: {
-    flexDirection: "column-reverse",
-    alignItems: "flex-start",
-    paddingVertical: 54,
-  },
-  heroContent: {
-    flex: 1,
-    maxWidth: 760,
-  },
-  avatarShell: {
-    width: 184,
-    height: 184,
-    borderRadius: 92,
-    borderWidth: 4,
-    borderColor: "rgba(255, 255, 255, 0.72)",
-    overflow: "hidden",
-    backgroundColor: "rgba(255, 255, 255, 0.18)",
-  },
-  avatarShellCompact: {
-    width: 132,
-    height: 132,
-    borderRadius: 66,
-  },
-  avatarImage: {
-    width: "100%",
-    height: "100%",
-  },
-  avatarImageCompact: {
-    width: "100%",
-    height: "100%",
-  },
-  kicker: {
-    alignSelf: "flex-start",
-    color: "#d9f2ef",
-    backgroundColor: "rgba(13, 118, 110, 0.68)",
-    borderColor: "rgba(255, 255, 255, 0.22)",
-    borderWidth: 1,
-    borderRadius: 6,
-    overflow: "hidden",
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: "700",
-  },
-  heroTitle: {
-    color: "#ffffff",
-    fontSize: 64,
-    lineHeight: 72,
-    fontWeight: "800",
-    marginTop: 22,
-    maxWidth: 780,
-  },
-  heroTitleCompact: {
-    fontSize: 44,
-    lineHeight: 52,
-  },
-  heroSubtitle: {
-    color: "#f6fafb",
-    fontSize: 22,
-    lineHeight: 31,
-    fontWeight: "700",
-    marginTop: 16,
-    maxWidth: 760,
-  },
-  heroMeta: {
-    color: "#d6e0e8",
-    fontSize: 16,
-    lineHeight: 24,
-    marginTop: 8,
-    maxWidth: 760,
-  },
-  heroCopy: {
-    color: "#eef5f5",
-    fontSize: 18,
-    lineHeight: 30,
-    marginTop: 24,
-    maxWidth: 680,
-  },
-  heroCopyCompact: {
-    fontSize: 16,
-    lineHeight: 26,
-  },
-  heroActions: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 12,
-    marginTop: 32,
-  },
-  linkButton: {
-    borderRadius: 7,
-    minHeight: 44,
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-  },
-  linkButtonPrimary: {
-    backgroundColor: colors.teal,
-    borderColor: colors.teal,
-  },
-  linkButtonSecondary: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    borderColor: "rgba(255, 255, 255, 0.42)",
-  },
-  linkButtonText: {
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: "700",
-  },
-  linkButtonTextPrimary: {
-    color: "#ffffff",
-  },
-  linkButtonTextSecondary: {
-    color: "#ffffff",
-  },
-  content: {
-    width: "100%",
-    maxWidth: 1180,
-    marginHorizontal: "auto",
-    paddingHorizontal: 24,
+  page: {
+    minHeight: "100vh",
     paddingBottom: 70,
   },
-  statStrip: {
-    marginTop: -42,
-    backgroundColor: colors.paper,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.line,
-    flexDirection: "row",
-    overflow: "hidden",
-  },
-  statStripCompact: {
-    flexDirection: "column",
-    marginTop: -28,
-  },
-  statItem: {
-    flex: 1,
-    paddingVertical: 22,
+  layout: {
+    width: "100%",
+    maxWidth: 1160,
+    marginHorizontal: "auto",
     paddingHorizontal: 24,
-    borderRightWidth: 1,
-    borderColor: colors.line,
+    paddingTop: 36,
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 42,
   },
-  statValue: {
-    color: colors.ink,
-    fontSize: 24,
-    lineHeight: 31,
-    fontWeight: "800",
+  layoutCompact: {
+    flexDirection: "column",
+    gap: 24,
   },
-  statLabel: {
-    color: colors.muted,
-    fontSize: 13,
-    lineHeight: 19,
-    marginTop: 4,
+  sidebar: {
+    width: 235,
+    position: "sticky",
+    top: 24,
+  },
+  sidebarCompact: {
+    width: "100%",
+    position: "relative",
+    top: 0,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 18,
+  },
+  avatarWrap: {
+    width: 168,
+    height: 168,
+    borderRadius: 84,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: 5,
+    backgroundColor: "#ffffff",
+  },
+  avatar: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 80,
+  },
+  authorBlock: {
+    marginTop: 14,
+    gap: 4,
+  },
+  authorName: {
+    color: colors.text,
+    fontSize: 22,
+    lineHeight: 29,
+    fontWeight: "700",
+  },
+  authorRole: {
+    color: colors.text,
+    fontSize: 14,
+    lineHeight: 21,
     fontWeight: "600",
   },
-  section: {
-    paddingTop: 78,
-  },
-  sectionHeading: {
-    maxWidth: 740,
-    marginBottom: 26,
-  },
-  sectionEyebrow: {
-    color: colors.wine,
+  authorBio: {
+    color: colors.lightText,
     fontSize: 13,
-    lineHeight: 18,
-    fontWeight: "800",
-    marginBottom: 8,
+    lineHeight: 20,
+  },
+  contactList: {
+    marginTop: 18,
+    gap: 7,
+  },
+  contactText: {
+    color: colors.lightText,
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  contactLink: {
+    color: colors.link,
+    fontSize: 13,
+    lineHeight: 19,
+    textDecorationLine: "underline",
+  },
+  article: {
+    flex: 1,
+    maxWidth: 820,
+  },
+  section: {
+    paddingTop: 18,
+    marginBottom: 36,
   },
   sectionTitle: {
-    color: colors.ink,
-    fontSize: 34,
-    lineHeight: 42,
-    fontWeight: "800",
+    color: colors.text,
+    fontSize: 24,
+    lineHeight: 31,
+    fontWeight: "700",
   },
-  sectionSubtitle: {
-    color: colors.muted,
-    fontSize: 16,
-    lineHeight: 26,
+  sectionRule: {
+    height: 1,
+    backgroundColor: colors.border,
     marginTop: 10,
+    marginBottom: 18,
   },
-  cardGrid: {
-    flexDirection: "row",
-    gap: 16,
+  pageTitle: {
+    color: colors.text,
+    fontSize: 30,
+    lineHeight: 38,
+    fontWeight: "700",
+    marginBottom: 12,
   },
-  cardGridCompact: {
-    flexDirection: "column",
+  leadText: {
+    color: colors.text,
+    fontSize: 16,
+    lineHeight: 28,
   },
-  card: {
-    backgroundColor: colors.paper,
-    borderRadius: 8,
-    borderColor: colors.line,
-    borderWidth: 1,
-    padding: 22,
-    minHeight: 220,
-  },
-  cardThird: {
-    flex: 1,
-  },
-  cardFull: {
-    width: "100%",
-  },
-  cardTitle: {
-    color: colors.ink,
-    fontSize: 20,
-    lineHeight: 27,
-    fontWeight: "800",
-  },
-  cardDescription: {
-    color: colors.muted,
+  bodyText: {
+    color: colors.text,
     fontSize: 15,
-    lineHeight: 24,
-    marginTop: 12,
+    lineHeight: 25,
   },
-  tagRow: {
+  inlineLink: {
+    color: colors.link,
+    fontSize: 14,
+    lineHeight: 22,
+    textDecorationLine: "underline",
+  },
+  interestWrap: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
-    marginTop: "auto",
-    paddingTop: 18,
+    marginTop: 18,
   },
-  tag: {
-    backgroundColor: colors.tealSoft,
-    borderRadius: 6,
+  interestPill: {
+    backgroundColor: colors.pill,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: 4,
     paddingHorizontal: 9,
     paddingVertical: 5,
   },
-  tagText: {
-    color: colors.teal,
+  interestText: {
+    color: colors.link,
     fontSize: 12,
-    lineHeight: 16,
-    fontWeight: "800",
-  },
-  publicationList: {
-    gap: 14,
-  },
-  publication: {
-    backgroundColor: colors.paper,
-    borderRadius: 8,
-    borderColor: colors.line,
-    borderWidth: 1,
-    flexDirection: "row",
-    overflow: "hidden",
-  },
-  publicationAccent: {
-    width: 6,
-    backgroundColor: colors.gold,
-  },
-  publicationBody: {
-    flex: 1,
-    padding: 22,
-  },
-  publicationTitle: {
-    color: colors.ink,
-    fontSize: 19,
-    lineHeight: 27,
-    fontWeight: "800",
-  },
-  publicationAuthors: {
-    color: colors.muted,
-    fontSize: 14,
-    lineHeight: 22,
-    marginTop: 8,
-  },
-  publicationVenue: {
-    color: colors.ink,
-    fontSize: 14,
-    lineHeight: 22,
+    lineHeight: 17,
     fontWeight: "700",
-    marginTop: 6,
-  },
-  publicationStatus: {
-    color: colors.wine,
-    fontSize: 13,
-    lineHeight: 20,
-    fontWeight: "700",
-    marginTop: 8,
-  },
-  sectionSplit: {
-    paddingTop: 78,
-    flexDirection: "row",
-    gap: 34,
-  },
-  sectionSplitCompact: {
-    flexDirection: "column",
-  },
-  splitColumn: {
-    flex: 1,
-  },
-  projectList: {
-    gap: 14,
-  },
-  projectItem: {
-    borderLeftWidth: 4,
-    borderLeftColor: colors.teal,
-    backgroundColor: colors.paper,
-    borderRadius: 8,
-    borderColor: colors.line,
-    borderWidth: 1,
-    padding: 20,
-  },
-  projectTitle: {
-    color: colors.ink,
-    fontSize: 18,
-    lineHeight: 25,
-    fontWeight: "800",
-  },
-  projectDetail: {
-    color: colors.muted,
-    fontSize: 15,
-    lineHeight: 24,
-    marginTop: 8,
-  },
-  timeline: {
-    gap: 14,
   },
   timelineItem: {
     flexDirection: "row",
-    gap: 16,
-  },
-  timelineYear: {
-    width: 64,
-    color: colors.wine,
-    fontSize: 15,
-    lineHeight: 24,
-    fontWeight: "800",
-  },
-  timelineBody: {
-    flex: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.line,
+    gap: 18,
     paddingBottom: 18,
+    marginBottom: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.softBorder,
   },
-  timelineTitle: {
-    color: colors.ink,
-    fontSize: 17,
-    lineHeight: 24,
-    fontWeight: "800",
-  },
-  timelineDetail: {
-    color: colors.muted,
-    fontSize: 15,
-    lineHeight: 24,
-    marginTop: 6,
-  },
-  contactSection: {
-    marginTop: 80,
-    borderRadius: 8,
-    backgroundColor: colors.ink,
-    padding: 28,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 24,
-  },
-  contactSectionCompact: {
-    alignItems: "flex-start",
-    flexDirection: "column",
-  },
-  contactCopy: {
+  timelineMain: {
     flex: 1,
   },
-  contactTitle: {
-    color: "#ffffff",
-    fontSize: 30,
-    lineHeight: 38,
-    fontWeight: "800",
+  itemTitle: {
+    color: colors.text,
+    fontSize: 18,
+    lineHeight: 25,
+    fontWeight: "700",
   },
-  contactText: {
-    color: "#d6e0e8",
-    fontSize: 15,
-    lineHeight: 24,
-    marginTop: 8,
-    maxWidth: 620,
+  itemSubtitle: {
+    color: colors.lightText,
+    fontSize: 14,
+    lineHeight: 21,
+    marginTop: 3,
   },
-  contactLinks: {
+  itemPeriod: {
+    width: 128,
+    color: colors.lightText,
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: "right",
+    fontWeight: "700",
+  },
+  pubItem: {
+    paddingBottom: 24,
+    marginBottom: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.softBorder,
+  },
+  pubHeader: {
+    marginBottom: 4,
+  },
+  pubTitle: {
+    color: colors.text,
+    fontSize: 18,
+    lineHeight: 26,
+    fontWeight: "700",
+  },
+  pubTag: {
+    color: "#d68a00",
+  },
+  venueText: {
+    color: colors.text,
+    fontSize: 14,
+    lineHeight: 22,
+    marginTop: 5,
+    fontStyle: "italic",
+  },
+  linkRow: {
+    marginTop: 7,
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,
+  },
+  bulletList: {
+    marginTop: 10,
+    gap: 5,
+  },
+  bulletText: {
+    color: colors.text,
+    fontSize: 14,
+    lineHeight: 23,
+  },
+  skillGrid: {
+    gap: 14,
+  },
+  skillGroup: {
+    paddingBottom: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.softBorder,
+  },
+  skillTitle: {
+    color: colors.text,
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: "700",
+    marginBottom: 3,
+  },
+  honorText: {
+    color: colors.text,
+    fontSize: 14,
+    lineHeight: 24,
+    marginTop: 16,
   },
 });
