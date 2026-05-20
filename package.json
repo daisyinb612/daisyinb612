@@ -1,0 +1,9 @@
+{
+  "name": "academic-homepage",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "web": "python3 -m http.server ${PORT:-4174} --bind 127.0.0.1",
+    "start": "npm run web"
+  }
+}

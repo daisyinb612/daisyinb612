@@ -15,6 +15,10 @@ import { profile } from "./profile.js";
 const html = htm.bind(React.createElement);
 const avatarImage = new URL("../assets/profile-avatar.jpg", import.meta.url).href;
 
+function assetUrl(path) {
+  return new URL(path, import.meta.url).href;
+}
+
 function openUrl(url) {
   Linking.openURL(url).catch(() => {});
 }
@@ -34,52 +38,61 @@ function ExternalLink({ label, url }) {
   `;
 }
 
-function TopNav({ compact }) {
+function TopNav({ compact, language, onToggleLanguage, t }) {
   return html`
     <${View} style=${styles.masthead}>
       <${View} style=${[styles.mastheadInner, compact ? styles.mastheadInnerCompact : null]}>
         <${Pressable} onPress=${() => scrollToSection("about")}>
-          <${Text} style=${styles.siteTitle}>${profile.siteTitle}</${Text}>
+          <${Text} style=${styles.siteTitle}>${t.siteTitle}</${Text}>
         </${Pressable}>
-        <${View} style=${[styles.navLinks, compact ? styles.navLinksCompact : null]}>
-          ${profile.nav.map(
-            (item) => html`
-              <${Pressable} key=${item.id} onPress=${() => scrollToSection(item.id)}>
-                <${Text} style=${styles.navLink}>${item.label}</${Text}>
-              </${Pressable}>
-            `,
-          )}
+        <${View} style=${styles.navCluster}>
+          <${View} style=${[styles.navLinks, compact ? styles.navLinksCompact : null]}>
+            ${t.nav.map(
+              (item) => html`
+                <${Pressable} key=${item.id} onPress=${() => scrollToSection(item.id)}>
+                  <${Text} style=${styles.navLink}>${item.label}</${Text}>
+                </${Pressable}>
+              `,
+            )}
+          </${View}>
+          <${Pressable}
+            accessibilityLabel=${`Switch language from ${language}`}
+            onPress=${onToggleLanguage}
+            style=${styles.languageToggle}
+          >
+            <${Text} style=${styles.languageText}>${t.switchLabel}</${Text}>
+          </${Pressable}>
         </${View}>
       </${View}>
     </${View}>
   `;
 }
 
-function Sidebar({ compact }) {
+function Sidebar({ compact, t }) {
   return html`
     <${View} style=${[styles.sidebar, compact ? styles.sidebarCompact : null]}>
       <${View} style=${styles.avatarWrap}>
         <${Image}
-          accessibilityLabel=${`${profile.name} portrait`}
+          accessibilityLabel=${profile.common.avatarAlt}
           resizeMode="cover"
           source=${{ uri: avatarImage }}
           style=${styles.avatar}
         />
       </${View}>
       <${View} style=${styles.authorBlock}>
-        <${Text} style=${styles.authorName}>${profile.name}</${Text}>
-        <${Text} style=${styles.authorRole}>${profile.role}</${Text}>
-        <${Text} style=${styles.authorBio}>${profile.affiliation}</${Text}>
-        <${Text} style=${styles.authorBio}>${profile.lab}</${Text}>
+        <${Text} style=${styles.authorName}>${t.name}</${Text}>
+        <${Text} style=${styles.authorRole}>${t.role}</${Text}>
+        <${Text} style=${styles.authorBio}>${t.affiliation}</${Text}>
+        <${Text} style=${styles.authorBio}>${t.lab}</${Text}>
       </${View}>
       <${View} style=${styles.contactList}>
-        <${Text} style=${styles.contactText}>Shanghai, China</${Text}>
-        <${Pressable} onPress=${() => openUrl(`mailto:${profile.email}`)}>
-          <${Text} style=${styles.contactLink}>${profile.email}</${Text}>
+        <${Text} style=${styles.contactText}>${t.location}</${Text}>
+        <${Pressable} onPress=${() => openUrl(`mailto:${profile.common.email}`)}>
+          <${Text} style=${styles.contactLink}>${profile.common.email}</${Text}>
         </${Pressable}>
-        <${Text} style=${styles.contactText}>${profile.phone}</${Text}>
-        <${ExternalLink} label="Google Scholar" url=${profile.scholar} />
-        <${ExternalLink} label="GitHub" url=${profile.github} />
+        <${Text} style=${styles.contactText}>${profile.common.phone}</${Text}>
+        <${ExternalLink} label="Google Scholar" url=${profile.common.scholar} />
+        <${ExternalLink} label="GitHub" url=${profile.common.github} />
       </${View}>
     </${View}>
   `;
@@ -109,32 +122,48 @@ function EducationItem({ item }) {
 }
 
 function Publication({ item }) {
+  const previewImage = item.image ? assetUrl(item.image) : null;
+
   return html`
     <${View} style=${styles.pubItem}>
-      <${View} style=${styles.pubHeader}>
-        <${Text} style=${styles.pubTitle}>
-          <${Text} style=${styles.pubTag}>[${item.tag}] </${Text}>${item.title}
-        </${Text}>
-      </${View}>
-      <${Text} style=${styles.itemSubtitle}>${item.authors}</${Text}>
-      <${Text} style=${styles.venueText}>${item.venue}</${Text}>
-      ${item.links.length
-        ? html`
-            <${View} style=${styles.linkRow}>
-              ${item.links.map(
-                (link) => html`
-                  <${ExternalLink} key=${link.label} label=${link.label} url=${link.url} />
-                `,
-              )}
-            </${View}>
-          `
-        : null}
-      <${View} style=${styles.bulletList}>
-        ${item.bullets.map(
-          (bullet) => html`
-            <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
-          `,
-        )}
+      <${View} style=${styles.pubContent}>
+        ${previewImage
+          ? html`
+              <${Image}
+                accessibilityLabel=${item.imageAlt || item.title}
+                resizeMode="contain"
+                source=${{ uri: previewImage }}
+                style=${styles.pubPreview}
+              />
+            `
+          : null}
+        <${View} style=${styles.pubBody}>
+          <${View} style=${styles.pubHeader}>
+            <${Text} style=${styles.pubTitle}>
+              <${Text} style=${styles.pubTag}>[${item.tag}] </${Text}>${item.title}
+            </${Text}>
+          </${View}>
+          <${Text} style=${styles.itemSubtitle}>${item.authors}</${Text}>
+          <${Text} style=${styles.venueText}>${item.venue}</${Text}>
+          ${item.links.length
+            ? html`
+                <${View} style=${styles.linkRow}>
+                  ${item.links.map(
+                    (link) => html`
+                      <${ExternalLink} key=${link.label} label=${link.label} url=${link.url} />
+                    `,
+                  )}
+                </${View}>
+              `
+            : null}
+          <${View} style=${styles.bulletList}>
+            ${item.bullets.map(
+              (bullet) => html`
+                <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
+              `,
+            )}
+          </${View}>
+        </${View}>
       </${View}>
     </${View}>
   `;
@@ -157,6 +186,20 @@ function ExperienceItem({ item }) {
   `;
 }
 
+function ProjectItem({ item }) {
+  return html`
+    <${View} style=${styles.projectItem}>
+      <${Text} style=${styles.itemTitle}>${item.title}</${Text}>
+      <${Text} style=${styles.itemSubtitle}>${item.subtitle}</${Text}>
+      ${item.bullets.map(
+        (bullet) => html`
+          <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
+        `,
+      )}
+    </${View}>
+  `;
+}
+
 function SkillGroup({ item }) {
   return html`
     <${View} style=${styles.skillGroup}>
@@ -168,20 +211,28 @@ function SkillGroup({ item }) {
 
 export function App() {
   const { width } = useWindowDimensions();
+  const [language, setLanguage] = React.useState("zh");
   const compact = width < 860;
+  const t = profile.locales[language];
+  const toggleLanguage = () => setLanguage((current) => (current === "zh" ? "en" : "zh"));
 
   return html`
     <${View} style=${styles.app}>
-      <${TopNav} compact=${compact} />
+      <${TopNav}
+        compact=${compact}
+        language=${language}
+        onToggleLanguage=${toggleLanguage}
+        t=${t}
+      />
       <${ScrollView} style=${styles.scroll} contentContainerStyle=${styles.page}>
         <${View} style=${[styles.layout, compact ? styles.layoutCompact : null]}>
-          <${Sidebar} compact=${compact} />
+          <${Sidebar} compact=${compact} t=${t} />
           <${View} style=${styles.article}>
-            <${Section} id="about" title="About">
-              <${Text} style=${styles.pageTitle}>${profile.name} / ${profile.englishName}</${Text}>
-              <${Text} style=${styles.leadText}>${profile.bio}</${Text}>
+            <${Section} id="about" title=${t.headings.about}>
+              <${Text} style=${styles.pageTitle}>${t.name} / ${t.englishName}</${Text}>
+              <${Text} style=${styles.leadText}>${t.bio}</${Text}>
               <${View} style=${styles.interestWrap}>
-                ${profile.interests.map(
+                ${t.interests.map(
                   (interest) => html`
                     <${View} key=${interest} style=${styles.interestPill}>
                       <${Text} style=${styles.interestText}>${interest}</${Text}>
@@ -191,40 +242,40 @@ export function App() {
               </${View}>
             </${Section}>
 
-            <${Section} id="education" title="Education">
-              ${profile.education.map(
+            <${Section} id="education" title=${t.headings.education}>
+              ${t.education.map(
                 (item) => html`<${EducationItem} key=${item.period} item=${item} />`,
               )}
             </${Section}>
 
-            <${Section} id="research" title="Research Interests">
-              <${Text} style=${styles.bodyText}>
-                My current work studies how people collaborate with AI agents in learning,
-                writing, and decision-making contexts. I am especially interested in agentic
-                workflows that are transparent, controllable, and useful for real educational
-                practice.
-              </${Text}>
+            <${Section} id="research" title=${t.headings.research}>
+              <${Text} style=${styles.bodyText}>${t.researchSummary}</${Text}>
             </${Section}>
 
-            <${Section} id="publications" title="Publications and Projects">
-              ${profile.publications.map(
+            <${Section} id="publications" title=${t.headings.publications}>
+              ${t.publications.map(
                 (item) => html`<${Publication} key=${item.title} item=${item} />`,
               )}
+              <${View} style=${styles.projectList}>
+                ${t.projects.map(
+                  (item) => html`<${ProjectItem} key=${item.title} item=${item} />`,
+                )}
+              </${View}>
             </${Section}>
 
-            <${Section} id="experience" title="Experience">
-              ${profile.experience.map(
+            <${Section} id="experience" title=${t.headings.experience}>
+              ${t.experience.map(
                 (item) => html`<${ExperienceItem} key=${item.title} item=${item} />`,
               )}
             </${Section}>
 
-            <${Section} id="skills" title="Skills">
+            <${Section} id="skills" title=${t.headings.skills}>
               <${View} style=${styles.skillGrid}>
-                ${profile.skills.map(
+                ${t.skills.map(
                   (item) => html`<${SkillGroup} key=${item.title} item=${item} />`,
                 )}
               </${View}>
-              <${Text} style=${styles.honorText}>Honors: ${profile.honors.join("；")}</${Text}>
+              <${Text} style=${styles.honorText}>${t.honorsTitle}: ${t.honors.join("；")}</${Text}>
             </${Section}>
           </${View}>
         </${View}>
@@ -287,6 +338,12 @@ const styles = StyleSheet.create({
     gap: 18,
     alignItems: "center",
   },
+  navCluster: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 14,
+  },
   navLinksCompact: {
     flexWrap: "wrap",
     gap: 12,
@@ -296,6 +353,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     fontWeight: "600",
+  },
+  languageToggle: {
+    minHeight: 30,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    justifyContent: "center",
+  },
+  languageText: {
+    color: colors.link,
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "700",
   },
   page: {
     minHeight: "100vh",
@@ -480,6 +552,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.softBorder,
   },
+  pubContent: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 16,
+    alignItems: "flex-start",
+  },
+  pubPreview: {
+    width: 196,
+    height: 110,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 4,
+    backgroundColor: "#f8fafb",
+    flexShrink: 0,
+  },
+  pubBody: {
+    flex: 1,
+    minWidth: 240,
+  },
   pubHeader: {
     marginBottom: 4,
   },
@@ -513,6 +604,15 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 14,
     lineHeight: 23,
+  },
+  projectList: {
+    gap: 14,
+  },
+  projectItem: {
+    paddingBottom: 18,
+    marginBottom: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.softBorder,
   },
   skillGrid: {
     gap: 14,
