@@ -1,7 +1,7 @@
 export const profile = {
   common: {
     avatarAlt: "Maxuejiao portrait",
-    email: "mxjinb612@163.com",
+    email: "mxjinb612@gmail.com",
     phone: "+86 134-7896-4303",
     homepage: "https://daisyinb612.github.io/",
     scholar: "https://scholar.google.com/citations?user=NiV3ahQAAAAJ&hl=en",
@@ -11,12 +11,12 @@ export const profile = {
     zh: {
       languageLabel: "中文",
       switchLabel: "English",
-      siteTitle: "马雪娇 - 学术主页",
+      siteTitle: "马雪娇",
       name: "马雪娇",
       englishName: "Maxuejiao",
-      role: "Incoming Ph.D. Student / Human-Agent Interaction Researcher",
-      affiliation: "上海人工智能研究院 · 华东师范大学",
-      lab: "计算机科学与技术 / 教育智能与人机交互",
+      role: "Incoming Ph.D. Student",
+      affiliation: "华东师范大学 · 上海人工智能研究院",
+      lab: "计算机科学与技术",
       location: "上海，中国",
       nav: [
         { id: "about", label: "关于我" },
@@ -24,15 +24,15 @@ export const profile = {
         { id: "research", label: "研究方向" },
         { id: "publications", label: "论文" },
         { id: "experience", label: "经历" },
-        { id: "skills", label: "技能" },
+        { id: "projects", label: "项目" },
       ],
       headings: {
         about: "关于我",
         education: "教育经历",
         research: "研究方向",
-        publications: "论文与项目",
-        experience: "实习与项目经历",
-        skills: "技能与荣誉",
+        publications: "论文",
+        experience: "实习经历",
+        projects: "项目经历",
       },
       bio:
         "我即将于 2026 年 9 月开始博士阶段学习，专业为计算机科学与技术，隶属于上海人工智能研究院。我的研究关注 Human-Agent Interaction、AI 支持的学习与创作，以及面向教育场景的智能交互系统。我希望通过原型设计、系统实现和用户研究，探索 agent 时代更可控、透明且有帮助的人机协作方式。",
@@ -42,32 +42,31 @@ export const profile = {
         "Human-Agent Interaction",
         "LLM Agents for Learning",
         "AI-supported Scriptwriting",
-        "Educational HCI",
-        "User Study and Mixed Methods",
+        "AI for Education",
       ],
       education: [
         {
           period: "2026.9 - 预计",
-          degree: "博士研究生，即将入学",
-          school: "上海人工智能研究院 / 华东师范大学",
-          detail: "计算机科学与技术专业；研究方向为 Human-Agent Interaction 与教育智能系统。",
+          degree: "博士研究生(计算机科学与技术)",
+          school: "华东师范大学",
+          // detail: "计算机科学与技术专业；研究方向为 Human-Agent Interaction, Education",
         },
         {
           period: "2024.9 - 2026.6",
-          degree: "硕士研究生，硕转博",
+          degree: "硕士研究生(教育技术学&计算机科学与技术)",
           school: "华东师范大学",
-          detail: "教育技术学；关注智能体交互、AI 支持学习、教育智能系统与用户研究。",
+          // detail: "教育技术学；关注智能体交互、AI 支持学习、教育智能系统与用户研究。",
         },
         {
           period: "2020.9 - 2024.6",
-          degree: "本科",
+          degree: "本科(环境设计)",
           school: "华东师范大学",
-          detail: "环境设计专业；专业排名 1/16，曾任班长。",
+          // detail: "环境设计专业；专业排名 1/16，曾任班长。",
         },
       ],
       publications: [
         {
-          tag: "CHI EA 2026",
+          tag: "CCF-A / CHI EA 2026",
           title:
             "CO-OPERA: Designing an AI System for Middle School Teachers to Co-Create Social Awareness Drama Scripts",
           authors: "Xuejiao Ma, Min Fan, Bo Jiang, Jiatong Wang, Yuyang He",
@@ -101,7 +100,7 @@ export const profile = {
           ],
         },
         {
-          tag: "TOG 2026",
+          tag: "CCF-A / TOG 2026",
           title:
             "FreeShell: A Context-Free 4D Printing Technique for Fabricating Complex 3D Triangle Mesh Shells",
           authors: "Chao Yuan, Shengqi Dang, Xuejiao Ma, Nan Cao",
@@ -133,49 +132,30 @@ export const profile = {
       ],
       projects: [
         {
-          title: "Neurobo: 可对话可交互的智能轮椅",
-          subtitle: "团队项目",
-          bullets: [
-            "构建面向智能轮椅场景的对话式交互原型，整合前端界面、后端 API 与 LLM 对话流程。",
-            "探索多模态辅助、RAG 和对话评分等功能在辅助出行与人机协作中的应用。",
-          ],
+          period: "2025.11 - 至今",
+          title: "（多模态 + 智能眼镜）面向操作视频的测评系统",
+          subtitle: "上海人工智能实验室 & 华东师范大学智能教育研究院",
         },
       ],
       experience: [
         {
-          period: "2025.5 - 2025.9",
-          title: "产品经理实习生",
-          org: "字节跳动 Data-speech",
-          bullets: [
-            "参与 prompt 撰写、数据标注、RLHF 相关流程设计与质量评估。",
-            "负责需求分析、原型迭代与跨职能沟通，将模型能力转化为可执行的标注与评测流程。",
-          ],
-        },
-      ],
-      skills: [
-        {
-          title: "AI 与 Agent",
-          items: ["ChatGPT", "Gemini", "DeepSeek", "LLM workflow", "prompt engineering", "RAG"],
+          period: "2025.11 - 2026.2",
+          title: "虾皮 Shopee",
+          org: "AI 产品经理实习生（搜推-AIGC-video）",
+          logo: "../assets/logo/shopee.png",
         },
         {
-          title: "开发能力",
-          items: ["React Native Web", "JavaScript", "Python", "SQL", "front-end prototyping"],
+          period: "2025.5 - 2025.10",
+          title: "字节跳动",
+          org: "AI 产品经理实习生（Data-speech，豆包端到端语音通话模型）",
+          logo: "../assets/logo/baytedance.png",
         },
         {
-          title: "HCI 研究",
-          items: ["用户访谈", "问卷设计", "可用性测试", "主题分析", "混合方法研究"],
+          period: "2023.10 - 2024.4",
+          title: "Momenta 自动驾驶科技公司",
+          org: "AI 产品经理实习生",
+          logo: "../assets/logo/momenta.png",
         },
-        {
-          title: "设计能力",
-          items: ["Figma", "交互设计", "视觉表达", "学术海报与论文图表"],
-        },
-      ],
-      honorsTitle: "荣誉",
-      honors: [
-        "华东师范大学优秀毕业生",
-        "华东师范大学特等奖学金",
-        "国家级创新创业训练计划项目负责人",
-        "全国大学生电子商务创新、创意及创业挑战赛校级赛三等奖",
       ],
     },
     en: {
@@ -194,15 +174,15 @@ export const profile = {
         { id: "research", label: "Research" },
         { id: "publications", label: "Publications" },
         { id: "experience", label: "Experience" },
-        { id: "skills", label: "Skills" },
+        { id: "projects", label: "Projects" },
       ],
       headings: {
         about: "About",
         education: "Education",
         research: "Research Interests",
-        publications: "Publications and Projects",
+        publications: "Publications",
         experience: "Experience",
-        skills: "Skills and Honors",
+        projects: "Projects",
       },
       bio:
         "I am an incoming Ph.D. student starting in September 2026, majoring in Computer Science and Technology and affiliated with Shanghai Artificial Intelligence Laboratory. My research focuses on Human-Agent Interaction, AI-supported learning and creativity, and intelligent interactive systems for education. I build and evaluate LLM-based systems through prototyping, system implementation, and user studies.",
@@ -239,7 +219,7 @@ export const profile = {
       ],
       publications: [
         {
-          tag: "CHI EA 2026",
+          tag: "CCF-A / CHI EA 2026",
           title:
             "CO-OPERA: Designing an AI System for Middle School Teachers to Co-Create Social Awareness Drama Scripts",
           authors: "Xuejiao Ma, Min Fan, Bo Jiang, Jiatong Wang, Yuyang He",
@@ -273,7 +253,7 @@ export const profile = {
           ],
         },
         {
-          tag: "TOG 2026",
+          tag: "CCF-A / TOG 2026",
           title:
             "FreeShell: A Context-Free 4D Printing Technique for Fabricating Complex 3D Triangle Mesh Shells",
           authors: "Chao Yuan, Shengqi Dang, Xuejiao Ma, Nan Cao",
@@ -305,6 +285,29 @@ export const profile = {
       ],
       projects: [
         {
+          period: "2025.11 - present",
+          title: "Multimodal Smart Glasses Evaluation System for Operation Videos",
+          subtitle:
+            "Shanghai Artificial Intelligence Laboratory & Institute of AI for Education, ECNU",
+          bullets: [
+            "Led product design for an AI evaluation system that helps teachers assess standardized physics and chemistry lab exams, while exploring smart-glasses support for student learning in lab procedures.",
+          ],
+          groups: [
+            {
+              title: "Web product design and demo development (React Native + Python Flask)",
+              bullets: [
+                "Designed an evaluation workflow for physics experiments with fixed rubrics, returning AI-generated assessment results for teacher review and verification.",
+              ],
+            },
+            {
+              title: "Interaction testing and solution design on Rokid smart glasses",
+              bullets: [
+                "Tested real-time video streaming and designed an OpenClaw-on-smart-glasses workflow for real-time guidance during physics experiments.",
+              ],
+            },
+          ],
+        },
+        {
           title: "Neurobo: Conversational and Interactive Intelligent Wheelchair",
           subtitle: "Team project",
           bullets: [
@@ -315,12 +318,83 @@ export const profile = {
       ],
       experience: [
         {
-          period: "2025.5 - 2025.9",
-          title: "Product Manager Intern",
-          org: "ByteDance Data-speech",
-          bullets: [
-            "Worked on prompt writing, data annotation workflows, RLHF-related process design, and quality evaluation.",
-            "Conducted requirement analysis, prototype iteration, and cross-functional communication to translate model capabilities into executable annotation and evaluation workflows.",
+          period: "2025.11 - 2026.2",
+          title: "Shopee",
+          org: "AI Product Manager Intern, Search and Recommendation AIGC Video",
+          logo: "../assets/logo/shopee.png",
+          groups: [
+            {
+              title: "Automated editing workflow for high-performing short videos",
+              bullets: [
+                "Researched automated video-editing product pipelines, including TT-ads generate and Jianying marketing-video workflows.",
+                "Built a text-only front-end video demo to validate the feasibility of a video-agent workflow.",
+              ],
+            },
+          ],
+        },
+        {
+          period: "2025.5 - 2025.10",
+          title: "ByteDance",
+          org: "AI Product Manager Intern, Data-speech, Doubao end-to-end voice call model",
+          logo: "../assets/logo/baytedance.png",
+          groups: [
+            {
+              title: "Evaluation strategy and automated evaluation",
+              bullets: [
+                "Designed and revised evaluation sets for intelligence, emotional intelligence, and persona hallucination by reading papers, referencing open-source datasets, and turning evaluation criteria into standardized test items and automated-evaluation prompts.",
+                "Used Python to automatically score fixed evaluation-set outputs and summarize score, label, and reason fields for issue diagnosis and analysis.",
+              ],
+            },
+            {
+              title: "Prompt engineering workflow demo",
+              bullets: [
+                "Built a personalized emotional-companion profile-generation workflow that extracts user information and preferences to create RAG data for personalized dialogue.",
+                "Used two LLMs for role-play data generation, producing high-quality positive and negative examples for targeted RL training and refining PK selection logic.",
+              ],
+            },
+            {
+              title: "Learning and tutoring mode design",
+              bullets: [
+                "Benchmarked GPT-study, Gemini-study LearnLM, Asksia, miyagilabs, ElevenLabs, and educational companion hardware.",
+                "Defined a three-level product goal: effective knowledge explanation, guided user thinking, and a longer-term multimodal text-and-image solution.",
+              ],
+            },
+          ],
+        },
+        {
+          period: "2023.10 - 2024.4",
+          title: "Momenta",
+          org: "AI Product Manager Intern",
+          logo: "../assets/logo/momenta.png",
+          groups: [
+            {
+              title: "Autonomous-driving feature development: obstacle avoidance at intersections",
+              bullets: [
+                "Analyzed real driving data to study vehicle speed and timing parameters, summarizing movement patterns for the target scenario.",
+                "Wrote algorithm rules based on scenario patterns to guide large-scale data annotation, review annotation quality, and coordinate with algorithm engineers for scenario-specific AI model training.",
+              ],
+            },
+            {
+              title: "General Motors autonomous-driving software production project in China",
+              bullets: [
+                "Worked on customized HMI feature design for autonomous-driving mode switching, mapping customer requirements and hardware constraints to physical-button interaction flows.",
+              ],
+            },
+          ],
+        },
+        {
+          period: "2023.5 - 2023.9",
+          title: "PINLAN AI Technology",
+          org: "AI Product Manager Intern",
+          groups: [
+            {
+              title:
+                "Tsinghua AIGC sports-architecture generation system; AI store-design and construction-drawing system",
+              bullets: [
+                "Mapped system architecture and user-experience flows, integrated pretrained machine-learning models into product concepts, and created web prototypes and interaction animations in Figma.",
+                "Wrote PRDs and user cases in Yuque, explained requirements to front-end, back-end, and algorithm teams, and iterated product logic with the team.",
+              ],
+            },
           ],
         },
       ],

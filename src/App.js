@@ -10,13 +10,17 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { profile } from "./profile.js";
+import { profile } from "./profile.js?v=20260521-noskill1";
 
 const html = htm.bind(React.createElement);
 const avatarImage = new URL("../assets/profile-avatar.jpg", import.meta.url).href;
 
 function assetUrl(path) {
   return new URL(path, import.meta.url).href;
+}
+
+function toList(value) {
+  return Array.isArray(value) ? value : [];
 }
 
 function openUrl(url) {
@@ -47,7 +51,7 @@ function TopNav({ compact, language, onToggleLanguage, t }) {
         </${Pressable}>
         <${View} style=${styles.navCluster}>
           <${View} style=${[styles.navLinks, compact ? styles.navLinksCompact : null]}>
-            ${t.nav.map(
+            ${toList(t.nav).map(
               (item) => html`
                 <${Pressable} key=${item.id} onPress=${() => scrollToSection(item.id)}>
                   <${Text} style=${styles.navLink}>${item.label}</${Text}>
@@ -114,7 +118,7 @@ function EducationItem({ item }) {
       <${View} style=${styles.timelineMain}>
         <${Text} style=${styles.itemTitle}>${item.school}</${Text}>
         <${Text} style=${styles.itemSubtitle}>${item.degree}</${Text}>
-        <${Text} style=${styles.bodyText}>${item.detail}</${Text}>
+        ${item.detail ? html`<${Text} style=${styles.bodyText}>${item.detail}</${Text}>` : null}
       </${View}>
       <${Text} style=${styles.itemPeriod}>${item.period}</${Text}>
     </${View}>
@@ -123,63 +127,97 @@ function EducationItem({ item }) {
 
 function Publication({ item }) {
   const previewImage = item.image ? assetUrl(item.image) : null;
+  const links = toList(item.links);
+  const bullets = toList(item.bullets);
 
   return html`
     <${View} style=${styles.pubItem}>
-      <${View} style=${styles.pubContent}>
-        ${previewImage
-          ? html`
-              <${Image}
-                accessibilityLabel=${item.imageAlt || item.title}
-                resizeMode="contain"
-                source=${{ uri: previewImage }}
-                style=${styles.pubPreview}
-              />
-            `
-          : null}
-        <${View} style=${styles.pubBody}>
-          <${View} style=${styles.pubHeader}>
-            <${Text} style=${styles.pubTitle}>
-              <${Text} style=${styles.pubTag}>[${item.tag}] </${Text}>${item.title}
-            </${Text}>
-          </${View}>
-          <${Text} style=${styles.itemSubtitle}>${item.authors}</${Text}>
-          <${Text} style=${styles.venueText}>${item.venue}</${Text}>
-          ${item.links.length
-            ? html`
-                <${View} style=${styles.linkRow}>
-                  ${item.links.map(
-                    (link) => html`
-                      <${ExternalLink} key=${link.label} label=${link.label} url=${link.url} />
-                    `,
-                  )}
-                </${View}>
-              `
-            : null}
-          <${View} style=${styles.bulletList}>
-            ${item.bullets.map(
+      <${View} style=${styles.pubHeader}>
+        <${Text} style=${styles.pubTitle}>
+          <${Text} style=${styles.pubTag}>[${item.tag}] </${Text}>${item.title}
+        </${Text}>
+      </${View}>
+      <${Text} style=${styles.pubAuthors}>${item.authors}</${Text}>
+      <${Text} style=${styles.venueText}>${item.venue}</${Text}>
+      ${links.length
+        ? html`
+            <${View} style=${styles.linkRow}>
+              ${links.map(
+                (link) => html`
+                  <${ExternalLink} key=${link.label} label=${link.label} url=${link.url} />
+                `,
+              )}
+            </${View}>
+          `
+        : null}
+      <${View} style=${styles.bulletList}>
+        ${bullets.map(
+          (bullet) => html`
+            <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
+          `,
+        )}
+      </${View}>
+      ${previewImage
+        ? html`
+            <${Image}
+              accessibilityLabel=${item.imageAlt || item.title}
+              resizeMode="contain"
+              source=${{ uri: previewImage }}
+              style=${styles.pubPreview}
+            />
+          `
+        : null}
+    </${View}>
+  `;
+}
+
+function DetailGroups({ item }) {
+  return html`
+    <${View} style=${styles.detailList}>
+      ${toList(item.bullets).map(
+        (bullet) => html`
+          <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
+        `,
+      )}
+      ${toList(item.groups).map(
+        (group) => html`
+          <${View} key=${group.title} style=${styles.detailGroup}>
+            <${Text} style=${styles.detailGroupTitle}>${group.title}</${Text}>
+            ${toList(group.bullets).map(
               (bullet) => html`
                 <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
               `,
             )}
           </${View}>
-        </${View}>
-      </${View}>
+        `,
+      )}
     </${View}>
   `;
 }
 
 function ExperienceItem({ item }) {
+  const logoImage = item.logo ? assetUrl(item.logo) : null;
+
   return html`
     <${View} style=${styles.timelineItem}>
-      <${View} style=${styles.timelineMain}>
-        <${Text} style=${styles.itemTitle}>${item.title}</${Text}>
-        <${Text} style=${styles.itemSubtitle}>${item.org}</${Text}>
-        ${item.bullets.map(
-          (bullet) => html`
-            <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
-          `,
-        )}
+      <${View} style=${styles.experienceMain}>
+        ${logoImage
+          ? html`
+              <${View} style=${styles.logoFrame}>
+                <${Image}
+                  accessibilityLabel=${`${item.title} logo`}
+                  resizeMode="contain"
+                  source=${{ uri: logoImage }}
+                  style=${styles.companyLogo}
+                />
+              </${View}>
+            `
+          : null}
+        <${View} style=${styles.experienceContent}>
+          <${Text} style=${styles.itemTitle}>${item.title}</${Text}>
+          <${Text} style=${styles.itemSubtitle}>${item.org}</${Text}>
+          <${DetailGroups} item=${item} />
+        </${View}>
       </${View}>
       <${Text} style=${styles.itemPeriod}>${item.period}</${Text}>
     </${View}>
@@ -188,14 +226,13 @@ function ExperienceItem({ item }) {
 
 function ProjectItem({ item }) {
   return html`
-    <${View} style=${styles.projectItem}>
-      <${Text} style=${styles.itemTitle}>${item.title}</${Text}>
-      <${Text} style=${styles.itemSubtitle}>${item.subtitle}</${Text}>
-      ${item.bullets.map(
-        (bullet) => html`
-          <${Text} key=${bullet} style=${styles.bulletText}>• ${bullet}</${Text}>
-        `,
-      )}
+    <${View} style=${styles.timelineItem}>
+      <${View} style=${styles.timelineMain}>
+        <${Text} style=${styles.itemTitle}>${item.title}</${Text}>
+        <${Text} style=${styles.itemSubtitle}>${item.subtitle}</${Text}>
+        <${DetailGroups} item=${item} />
+      </${View}>
+      ${item.period ? html`<${Text} style=${styles.itemPeriod}>${item.period}</${Text}>` : null}
     </${View}>
   `;
 }
@@ -204,7 +241,7 @@ function SkillGroup({ item }) {
   return html`
     <${View} style=${styles.skillGroup}>
       <${Text} style=${styles.skillTitle}>${item.title}</${Text}>
-      <${Text} style=${styles.bodyText}>${item.items.join(" · ")}</${Text}>
+      <${Text} style=${styles.bodyText}>${toList(item.items).join(" · ")}</${Text}>
     </${View}>
   `;
 }
@@ -232,7 +269,7 @@ export function App() {
               <${Text} style=${styles.pageTitle}>${t.name} / ${t.englishName}</${Text}>
               <${Text} style=${styles.leadText}>${t.bio}</${Text}>
               <${View} style=${styles.interestWrap}>
-                ${t.interests.map(
+                ${toList(t.interests).map(
                   (interest) => html`
                     <${View} key=${interest} style=${styles.interestPill}>
                       <${Text} style=${styles.interestText}>${interest}</${Text}>
@@ -243,7 +280,7 @@ export function App() {
             </${Section}>
 
             <${Section} id="education" title=${t.headings.education}>
-              ${t.education.map(
+              ${toList(t.education).map(
                 (item) => html`<${EducationItem} key=${item.period} item=${item} />`,
               )}
             </${Section}>
@@ -253,29 +290,21 @@ export function App() {
             </${Section}>
 
             <${Section} id="publications" title=${t.headings.publications}>
-              ${t.publications.map(
+              ${toList(t.publications).map(
                 (item) => html`<${Publication} key=${item.title} item=${item} />`,
               )}
-              <${View} style=${styles.projectList}>
-                ${t.projects.map(
-                  (item) => html`<${ProjectItem} key=${item.title} item=${item} />`,
-                )}
-              </${View}>
             </${Section}>
 
             <${Section} id="experience" title=${t.headings.experience}>
-              ${t.experience.map(
+              ${toList(t.experience).map(
                 (item) => html`<${ExperienceItem} key=${item.title} item=${item} />`,
               )}
             </${Section}>
 
-            <${Section} id="skills" title=${t.headings.skills}>
-              <${View} style=${styles.skillGrid}>
-                ${t.skills.map(
-                  (item) => html`<${SkillGroup} key=${item.title} item=${item} />`,
-                )}
-              </${View}>
-              <${Text} style=${styles.honorText}>${t.honorsTitle}: ${t.honors.join("；")}</${Text}>
+            <${Section} id="projects" title=${t.headings.projects}>
+              ${toList(t.projects).map(
+                (item) => html`<${ProjectItem} key=${item.title} item=${item} />`,
+              )}
             </${Section}>
           </${View}>
         </${View}>
@@ -517,6 +546,7 @@ const styles = StyleSheet.create({
   },
   timelineItem: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 18,
     paddingBottom: 18,
     marginBottom: 18,
@@ -525,6 +555,34 @@ const styles = StyleSheet.create({
   },
   timelineMain: {
     flex: 1,
+    minWidth: 260,
+  },
+  experienceMain: {
+    flex: 1,
+    minWidth: 260,
+    flexDirection: "row",
+    gap: 14,
+    alignItems: "flex-start",
+  },
+  experienceContent: {
+    flex: 1,
+    minWidth: 0,
+  },
+  logoFrame: {
+    width: 48,
+    height: 48,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 6,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 6,
+    flexShrink: 0,
+  },
+  companyLogo: {
+    width: "100%",
+    height: "100%",
   },
   itemTitle: {
     color: colors.text,
@@ -545,74 +603,81 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     textAlign: "right",
     fontWeight: "700",
+    marginLeft: "auto",
   },
   pubItem: {
-    paddingBottom: 24,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 6,
+    paddingHorizontal: 22,
+    paddingTop: 20,
+    paddingBottom: 22,
     marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.softBorder,
-  },
-  pubContent: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 16,
-    alignItems: "flex-start",
+    backgroundColor: "#ffffff",
   },
   pubPreview: {
-    width: 196,
-    height: 110,
+    width: "100%",
+    aspectRatio: 3.15,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 4,
-    backgroundColor: "#f8fafb",
-    flexShrink: 0,
-  },
-  pubBody: {
-    flex: 1,
-    minWidth: 240,
+    backgroundColor: "#ffffff",
+    marginTop: 18,
   },
   pubHeader: {
     marginBottom: 4,
   },
   pubTitle: {
     color: colors.text,
-    fontSize: 18,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 29,
     fontWeight: "700",
   },
   pubTag: {
     color: "#d68a00",
   },
+  pubAuthors: {
+    color: colors.lightText,
+    fontSize: 15,
+    lineHeight: 23,
+    marginTop: 8,
+    fontWeight: "600",
+  },
   venueText: {
     color: colors.text,
-    fontSize: 14,
-    lineHeight: 22,
-    marginTop: 5,
+    fontSize: 15,
+    lineHeight: 24,
+    marginTop: 8,
     fontStyle: "italic",
   },
   linkRow: {
-    marginTop: 7,
+    marginTop: 12,
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 10,
+    gap: 12,
   },
   bulletList: {
-    marginTop: 10,
-    gap: 5,
+    marginTop: 16,
+    gap: 8,
   },
   bulletText: {
     color: colors.text,
-    fontSize: 14,
+    fontSize: 15,
+    lineHeight: 24,
+  },
+  detailList: {
+    marginTop: 8,
+    gap: 6,
+  },
+  detailGroup: {
+    marginTop: 6,
+    gap: 5,
+  },
+  detailGroupTitle: {
+    color: colors.text,
+    fontSize: 15,
     lineHeight: 23,
-  },
-  projectList: {
-    gap: 14,
-  },
-  projectItem: {
-    paddingBottom: 18,
-    marginBottom: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.softBorder,
+    fontWeight: "700",
   },
   skillGrid: {
     gap: 14,
