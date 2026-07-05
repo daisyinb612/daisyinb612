@@ -10,7 +10,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { profile } from "./profile.js?v=20260525-viewstats";
+import { profile } from "./profile.js?v=20260705-en-zh-align";
 
 const html = htm.bind(React.createElement);
 const avatarImage = new URL("../assets/profile-avatar.jpg", import.meta.url).href;
@@ -39,99 +39,6 @@ function ExternalLink({ label, url }) {
     <${Pressable} accessibilityRole="link" onPress=${() => openUrl(url)}>
       <${Text} style=${styles.inlineLink}>${label}</${Text}>
     </${Pressable}>
-  `;
-}
-
-const viewMetricIds = {
-  sitePv: "busuanzi_value_site_pv",
-  siteUv: "busuanzi_value_site_uv",
-  pagePv: "busuanzi_value_page_pv",
-};
-
-function useViewStats() {
-  const [stats, setStats] = React.useState({
-    sitePv: "--",
-    siteUv: "--",
-    pagePv: "--",
-  });
-
-  React.useEffect(() => {
-    if (typeof document === "undefined") {
-      return undefined;
-    }
-
-    const scriptId = "busuanzi-view-counter";
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement("script");
-      script.id = scriptId;
-      script.async = true;
-      script.src = "https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js";
-      document.body.appendChild(script);
-    }
-
-    let timerId;
-    let isMounted = true;
-
-    const syncStats = () => {
-      setStats((current) => {
-        const next = { ...current };
-        let changed = false;
-
-        Object.entries(viewMetricIds).forEach(([key, elementId]) => {
-          const value = document.getElementById(elementId)?.textContent?.trim();
-          if (value && value !== next[key]) {
-            next[key] = value;
-            changed = true;
-          }
-        });
-
-        return changed ? next : current;
-      });
-
-      if (isMounted) {
-        timerId = window.setTimeout(syncStats, 1000);
-      }
-    };
-
-    timerId = window.setTimeout(syncStats, 800);
-
-    return () => {
-      isMounted = false;
-      window.clearTimeout(timerId);
-    };
-  }, []);
-
-  return stats;
-}
-
-function ViewCounter({ t }) {
-  const stats = useViewStats();
-  const viewStats = t.viewStats;
-
-  return html`
-    <${View} style=${styles.viewStats} accessibilityLabel=${viewStats.title}>
-      <${Text} style=${styles.viewStatsTitle}>${viewStats.title}</${Text}>
-      <${View} style=${styles.viewStatsGrid}>
-        <${View} nativeID="busuanzi_container_site_pv" style=${styles.viewStatItem}>
-          <${Text} style=${styles.viewStatLabel}>${viewStats.sitePv}</${Text}>
-          <${Text} nativeID=${viewMetricIds.sitePv} style=${styles.viewStatValue}>
-            ${stats.sitePv}
-          </${Text}>
-        </${View}>
-        <${View} nativeID="busuanzi_container_site_uv" style=${styles.viewStatItem}>
-          <${Text} style=${styles.viewStatLabel}>${viewStats.siteUv}</${Text}>
-          <${Text} nativeID=${viewMetricIds.siteUv} style=${styles.viewStatValue}>
-            ${stats.siteUv}
-          </${Text}>
-        </${View}>
-        <${View} nativeID="busuanzi_container_page_pv" style=${styles.viewStatItem}>
-          <${Text} style=${styles.viewStatLabel}>${viewStats.pagePv}</${Text}>
-          <${Text} nativeID=${viewMetricIds.pagePv} style=${styles.viewStatValue}>
-            ${stats.pagePv}
-          </${Text}>
-        </${View}>
-      </${View}>
-    </${View}>
   `;
 }
 
@@ -318,12 +225,35 @@ function ExperienceItem({ item }) {
 }
 
 function ProjectItem({ item }) {
+  const images = toList(item.images);
+
   return html`
     <${View} style=${styles.timelineItem}>
       <${View} style=${styles.timelineMain}>
         <${Text} style=${styles.itemTitle}>${item.title}</${Text}>
-        <${Text} style=${styles.itemSubtitle}>${item.subtitle}</${Text}>
+        ${item.subtitle ? html`<${Text} style=${styles.itemSubtitle}>${item.subtitle}</${Text}>` : null}
         <${DetailGroups} item=${item} />
+        ${images.length
+          ? html`
+              <${View} style=${styles.projectImageStrip}>
+                ${images.map((image) => {
+                  const imageSource = typeof image === "string" ? image : image.src;
+                  const imageAlt = typeof image === "string" ? item.title : image.alt || item.title;
+
+                  return html`
+                    <${View} key=${imageSource} style=${styles.projectImageFrame}>
+                      <${Image}
+                        accessibilityLabel=${imageAlt}
+                        resizeMode="contain"
+                        source=${{ uri: assetUrl(imageSource) }}
+                        style=${styles.projectImage}
+                      />
+                    </${View}>
+                  `;
+                })}
+              </${View}>
+            `
+          : null}
       </${View}>
       ${item.period ? html`<${Text} style=${styles.itemPeriod}>${item.period}</${Text}>` : null}
     </${View}>
@@ -378,13 +308,15 @@ export function App() {
               )}
             </${Section}>
 
-            <${Section} id="research" title=${t.headings.research}>
-              <${Text} style=${styles.bodyText}>${t.researchSummary}</${Text}>
-            </${Section}>
-
             <${Section} id="publications" title=${t.headings.publications}>
               ${toList(t.publications).map(
                 (item) => html`<${Publication} key=${item.title} item=${item} />`,
+              )}
+            </${Section}>
+
+            <${Section} id="innovation" title=${t.headings.innovation}>
+              ${toList(t.innovation).map(
+                (item) => html`<${ProjectItem} key=${item.title} item=${item} />`,
               )}
             </${Section}>
 
@@ -394,15 +326,12 @@ export function App() {
               )}
             </${Section}>
 
-            <${Section} id="projects" title=${t.headings.projects}>
-              ${toList(t.projects).map(
+            <${Section} id="publicService" title=${t.headings.publicService}>
+              ${toList(t.publicService).map(
                 (item) => html`<${ProjectItem} key=${item.title} item=${item} />`,
               )}
             </${Section}>
           </${View}>
-        </${View}>
-        <${View} nativeID="page-view-stats" style=${styles.footer}>
-          <${ViewCounter} t=${t} />
         </${View}>
       </${ScrollView}>
     </${View}>
@@ -577,51 +506,6 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     textDecorationLine: "underline",
   },
-  footer: {
-    width: "100%",
-    maxWidth: 1160,
-    marginHorizontal: "auto",
-    paddingHorizontal: 24,
-    paddingTop: 10,
-  },
-  viewStats: {
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    paddingTop: 20,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 18,
-  },
-  viewStatsTitle: {
-    color: colors.text,
-    fontSize: 14,
-    lineHeight: 20,
-    fontWeight: "700",
-  },
-  viewStatsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 16,
-  },
-  viewStatItem: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    gap: 6,
-  },
-  viewStatLabel: {
-    color: colors.lightText,
-    fontSize: 12,
-    lineHeight: 17,
-  },
-  viewStatValue: {
-    color: colors.link,
-    fontSize: 14,
-    lineHeight: 19,
-    fontWeight: "700",
-    textAlign: "right",
-  },
   article: {
     flex: 1,
     maxWidth: 820,
@@ -745,6 +629,26 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontWeight: "700",
     marginLeft: "auto",
+  },
+  projectImageStrip: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginTop: 12,
+  },
+  projectImageFrame: {
+    width: 150,
+    maxWidth: "46%",
+    aspectRatio: 1.45,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 4,
+    backgroundColor: "#ffffff",
+    padding: 4,
+  },
+  projectImage: {
+    width: "100%",
+    height: "100%",
   },
   pubItem: {
     borderWidth: 1,

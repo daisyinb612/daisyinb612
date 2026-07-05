@@ -18,44 +18,33 @@ export const profile = {
       affiliation: "华东师范大学",
       lab: "计算机科学与技术",
       location: "上海，中国",
-      viewStats: {
-        title: "访问统计",
-        sitePv: "总浏览量",
-        siteUv: "访客数",
-        pagePv: "本页浏览",
-      },
       nav: [
         { id: "about", label: "关于我" },
         { id: "education", label: "教育经历" },
-        { id: "research", label: "研究方向" },
         { id: "publications", label: "论文" },
-        { id: "experience", label: "经历" },
-        { id: "projects", label: "项目" },
+        { id: "innovation", label: "科创经历" },
+        { id: "publicService", label: "公益实践" },
       ],
       headings: {
         about: "关于我",
         education: "教育经历",
-        research: "研究方向",
         publications: "论文",
+        innovation: "科创经历",
         experience: "实习经历",
-        projects: "项目经历",
+        publicService: "公益实践",
       },
       bio:
-        "我即将于 2026 年 9 月开始博士阶段学习，专业为计算机科学与技术，隶属于上海人工智能研究院。我的研究关注 Human-Agent Interaction、AI 支持的学习与创作，以及面向教育场景的智能交互系统。我希望通过原型设计、系统实现和用户研究，探索 agent 时代更可控、透明且有帮助的人机协作方式。",
-      researchSummary:
-        "我的当前兴趣集中在智能体时代的交互新范式：人如何理解、控制和信任 AI agents；教师与学习者如何在生成式 AI 系统中保持主体性；以及如何通过可解释的工作流设计提升教育场景中的创作、反馈和决策质量。",
+        "我即将于 2026 年 9 月继续在华东师范大学上海人工智能教育研究院攻读人机交互博士，关注非正式学习场景。此前，我曾在字节跳动和虾皮担任 AI 产品经理实习生，支持AI模型训练和产品的工作。我希望持续探索和实践 AI-native 产品，在生活与学习场景，让人能够与智能体共同协作和成长。",
       interests: [
         "Human-Agent Interaction",
-        "LLM Agents for Learning",
-        "AI-supported Scriptwriting",
-        "AI for Education",
+        "Agent Support for Informal Learning",
+        "Agent Support for Everyday Life",
       ],
       education: [
         {
           period: "2026.9 - 2029.6",
           degree: "博士研究生(计算机科学与技术)",
           school: "华东师范大学",
-          // detail: "计算机科学与技术专业；研究方向为 Human-Agent Interaction, Education",
         },
         {
           period: "2024.9 - 2026.6",
@@ -71,6 +60,30 @@ export const profile = {
         },
       ],
       publications: [
+        {
+          tag: "CCF-A / UbiComp Workshop (Submitted)",
+          title:
+            "BrickBuddy: A Step-Situated Wearable Agent for Knowledge Exploration During Brick Assembly",
+          authors: "Xuejiao Ma, Ruijia Li, Bo Jiang",
+          venue: "Submitted to UbiComp Workshop",
+          status: "Workshop submission",
+          image: "../assets/images/Ubicomp.jpg",
+          imageAlt: "BrickBuddy UbiComp Workshop preview",
+          links: [
+            {
+              label: "项目介绍",
+              url: "https://daisyinb612.github.io/BrickBuddy/",
+            },
+            {
+              label: "Demo",
+              url: "https://www.youtube.com/watch?v=3-L7GyE6FCs",
+            },
+          ],
+          bullets: [
+            // "探索面向积木拼装学习的 step-situated wearable agent，支持学习者在真实操作过程中进行知识探索。",
+            // "结合智能眼镜第一视角、步骤监测与语音交互，让智能体基于当前拼装步骤提供情境化回应。",
+          ],
+        },
         {
           tag: "CCF-A / CHI EA 2026",
           title:
@@ -100,9 +113,9 @@ export const profile = {
             },
           ],
           bullets: [
-            "设计并实现面向初中教师的 AI 协作剧本创作系统，支持社会情感学习场景中的叙事脚本生成与编辑。",
-            "探索 prompt engineering、多步骤 AI workflow 与教师可控的人机协作界面设计。",
-            "围绕脚本质量、创作效率、可用性与教师感知价值开展系统评估。",
+            // "设计并实现面向初中教师的 AI 协作剧本创作系统，支持社会情感学习场景中的叙事脚本生成与编辑。",
+            // "探索 prompt engineering、多步骤 AI workflow 与教师可控的人机协作界面设计。",
+            // "围绕脚本质量、创作效率、可用性与教师感知价值开展系统评估。",
           ],
         },
         {
@@ -131,16 +144,41 @@ export const profile = {
             },
           ],
           bullets: [
-            "参与论文可视化、实验材料整理与结果呈现，支持复杂 3D 三角网格壳体制造方法的学术表达。",
-            "协助分析打印约束、mesh 处理流程和实验结果，为论文图表与叙述提供支持。",
+            // "参与论文可视化、实验材料整理与结果呈现，支持复杂 3D 三角网格壳体制造方法的学术表达。",
+            // "协助分析打印约束、mesh 处理流程和实验结果，为论文图表与叙述提供支持。",
           ],
         },
       ],
-      projects: [
+      innovation: [
         {
-          period: "2025.11 - 至今",
-          title: "（多模态 + 智能眼镜）面向操作视频的测评系统",
-          subtitle: "上海人工智能实验室 & 华东师范大学智能教育研究院",
+          period: "2026",
+          title: "抖音创变者计划2026上海松江赛区交流赛金奖&游园会之星",
+          subtitle: "[这次一定]运用搭搭agent的轻量化社交出行产品",
+          images: [
+            {
+              src: "../assets/images/douyin1.jpg?v=20260705-jpeg",
+              alt: "抖音创变者计划2026 上海松江赛区交流赛金奖现场图 1",
+            },
+            {
+              src: "../assets/images/douyin2.jpg?v=20260705-jpeg",
+              alt: "抖音创变者计划2026 上海松江赛区交流赛金奖现场图 2",
+            },
+          ],
+        },
+        {
+          period: "2025",
+          title: "腾讯 2025 Light 公益创造营年度优秀项目",
+          subtitle: "CO-OPERA:人与人工智能协作式的青少年心理戏剧模拟平台",
+          images: [
+            {
+              src: "../assets/images/tencent1.png",
+              alt: "腾讯 2025 Light 公益创造营年度优秀项目图片 1",
+            },
+            {
+              src: "../assets/images/tencent2.png",
+              alt: "腾讯 2025 Light 公益创造营年度优秀项目图片 2",
+            },
+          ],
         },
       ],
       experience: [
@@ -163,73 +201,88 @@ export const profile = {
           logo: "../assets/logo/momenta.png",
         },
       ],
+      publicService: [
+        {
+          period: "2020.11",
+          title: "西岸美术馆艺术教育导览志愿者",
+        },
+        {
+          period: "2021.7",
+          title: "“小树慢慢长大”福建龙岩支教活动",
+        },
+      ],
     },
     en: {
       languageLabel: "English",
       switchLabel: "中文",
-      siteTitle: "Maxuejiao - Academic Homepage",
+      siteTitle: "Xuejiao Ma",
       name: "Xuejiao Ma",
       englishName: "Maxuejiao",
-      role: "Incoming Ph.D. Student / Human-Agent Interaction Researcher",
-      affiliation: "Shanghai Artificial Intelligence Laboratory · East China Normal University",
-      lab: "Computer Science and Technology / AI for Education and HCI",
+      role: "Incoming Ph.D. Student",
+      affiliation: "East China Normal University",
+      lab: "Computer Science and Technology",
       location: "Shanghai, China",
-      viewStats: {
-        title: "View Stats",
-        sitePv: "Site views",
-        siteUv: "Visitors",
-        pagePv: "Page views",
-      },
       nav: [
         { id: "about", label: "About" },
         { id: "education", label: "Education" },
-        { id: "research", label: "Research" },
         { id: "publications", label: "Publications" },
-        { id: "experience", label: "Experience" },
-        { id: "projects", label: "Projects" },
+        { id: "innovation", label: "Innovation" },
+        { id: "publicService", label: "Public Service" },
       ],
       headings: {
         about: "About",
         education: "Education",
-        research: "Research Interests",
         publications: "Publications",
-        experience: "Experience",
-        projects: "Projects",
+        innovation: "Innovation",
+        experience: "Internship Experience",
+        publicService: "Public Service",
       },
       bio:
-        "I am an incoming Ph.D. student starting in September 2026, majoring in Computer Science and Technology and affiliated with Shanghai Artificial Intelligence Laboratory. My research focuses on Human-Agent Interaction, AI-supported learning and creativity, and intelligent interactive systems for education. I build and evaluate LLM-based systems through prototyping, system implementation, and user studies.",
-      researchSummary:
-        "My current work studies new interaction paradigms in the age of AI agents: how people understand, control, and trust agents; how teachers and learners retain agency in generative AI systems; and how transparent workflows can improve creation, feedback, and decision-making in educational contexts.",
+        "Starting in September 2026, I will continue as a Ph.D. student in Human-Computer Interaction at the Shanghai Institute of AI for Education, East China Normal University, focusing on informal learning contexts. Previously, I interned as an AI Product Manager at ByteDance and Shopee, supporting AI model training and product work. I hope to continue exploring and practicing AI-native products so that, in everyday life and learning scenarios, people can collaborate and grow with agents more naturally and with greater control.",
       interests: [
         "Human-Agent Interaction",
-        "LLM Agents for Learning",
-        "AI-supported Scriptwriting",
-        "Educational HCI",
-        "User Study and Mixed Methods",
+        "Agent Support for Informal Learning",
+        "Agent Support for Everyday Life",
       ],
       education: [
         {
-          period: "2026.9 - expected",
-          degree: "Incoming Ph.D. Student",
-          school: "Shanghai Artificial Intelligence Laboratory / East China Normal University",
-          detail:
-            "Computer Science and Technology; focusing on Human-Agent Interaction and intelligent educational systems.",
+          period: "2026.9 - 2029.6",
+          degree: "Ph.D. Student (Computer Science and Technology)",
+          school: "East China Normal University",
         },
         {
           period: "2024.9 - 2026.6",
-          degree: "M.S. Student, master-to-Ph.D. track",
+          degree: "M.S. Student (Educational Technology & Computer Science and Technology)",
           school: "East China Normal University",
-          detail:
-            "Educational Technology; focusing on agent interaction, AI-supported learning, intelligent educational systems, and user research.",
         },
         {
           period: "2020.9 - 2024.6",
-          degree: "B.A.",
+          degree: "B.A. (Environmental Design)",
           school: "East China Normal University",
-          detail: "Environmental Design; ranked 1/16 in the program and served as class monitor.",
         },
       ],
       publications: [
+        {
+          tag: "CCF-A / UbiComp Workshop (Submitted)",
+          title:
+            "BrickBuddy: A Step-Situated Wearable Agent for Knowledge Exploration During Brick Assembly",
+          authors: "Xuejiao Ma, Ruijia Li, Bo Jiang",
+          venue: "Submitted to UbiComp Workshop",
+          status: "Workshop submission",
+          image: "../assets/images/Ubicomp.jpg",
+          imageAlt: "BrickBuddy UbiComp Workshop preview",
+          links: [
+            {
+              label: "Project Page",
+              url: "https://daisyinb612.github.io/BrickBuddy/",
+            },
+            {
+              label: "Demo",
+              url: "https://www.youtube.com/watch?v=3-L7GyE6FCs",
+            },
+          ],
+          bullets: [],
+        },
         {
           tag: "CCF-A / CHI EA 2026",
           title:
@@ -258,11 +311,7 @@ export const profile = {
               url: "https://dl.acm.org/action/showCitFormats?doi=10.1145%2F3772363.3798316",
             },
           ],
-          bullets: [
-            "Designed and implemented an AI co-creation system that helps middle school teachers create social awareness drama scripts.",
-            "Explored prompt engineering, multi-step AI workflows, and teacher-centered controls for human-AI collaboration.",
-            "Evaluated the system around script quality, writing efficiency, usability, and perceived usefulness.",
-          ],
+          bullets: [],
         },
         {
           tag: "CCF-A / TOG 2026",
@@ -289,42 +338,41 @@ export const profile = {
               url: "https://dl.acm.org/action/showCitFormats?doi=10.1145%2F3778349",
             },
           ],
-          bullets: [
-            "Contributed to visualization, experimental material organization, and result presentation for complex 3D mesh shell fabrication.",
-            "Supported analysis of printing constraints, mesh processing workflows, and experimental outcomes.",
-          ],
+          bullets: [],
         },
       ],
-      projects: [
+      innovation: [
         {
-          period: "2025.11 - present",
-          title: "Multimodal Smart Glasses Evaluation System for Operation Videos",
+          period: "2026",
+          title:
+            "Douyin Change-maker Program 2026 Shanghai Songjiang Regional Exchange Gold Award & Fair Star",
           subtitle:
-            "Shanghai Artificial Intelligence Laboratory & Institute of AI for Education, ECNU",
-          bullets: [
-            "Led product design for an AI evaluation system that helps teachers assess standardized physics and chemistry lab exams, while exploring smart-glasses support for student learning in lab procedures.",
-          ],
-          groups: [
+            "[This Time for Sure] A lightweight social travel product powered by Dada Agent",
+          images: [
             {
-              title: "Web product design and demo development (React Native + Python Flask)",
-              bullets: [
-                "Designed an evaluation workflow for physics experiments with fixed rubrics, returning AI-generated assessment results for teacher review and verification.",
-              ],
+              src: "../assets/images/douyin1.jpg?v=20260705-jpeg",
+              alt: "Douyin Change-maker Program 2026 Shanghai Songjiang Gold Award image 1",
             },
             {
-              title: "Interaction testing and solution design on Rokid smart glasses",
-              bullets: [
-                "Tested real-time video streaming and designed an OpenClaw-on-smart-glasses workflow for real-time guidance during physics experiments.",
-              ],
+              src: "../assets/images/douyin2.jpg?v=20260705-jpeg",
+              alt: "Douyin Change-maker Program 2026 Shanghai Songjiang Gold Award image 2",
             },
           ],
         },
         {
-          title: "Neurobo: Conversational and Interactive Intelligent Wheelchair",
-          subtitle: "Team project",
-          bullets: [
-            "Built a conversational assistant prototype for intelligent wheelchair interaction scenarios, integrating front-end UI, back-end APIs, and LLM dialogue flow.",
-            "Explored multimodal assistance, RAG, and dialogue scoring for assistive mobility and human-agent collaboration.",
+          period: "2025",
+          title: "Tencent 2025 Light Public-Welfare Creator Camp Annual Outstanding Project",
+          subtitle:
+            "CO-OPERA: A Human-AI Collaborative Psychodrama Simulation Platform for Adolescents",
+          images: [
+            {
+              src: "../assets/images/tencent1.png",
+              alt: "Tencent 2025 Light Public-Welfare Creator Camp Outstanding Project image 1",
+            },
+            {
+              src: "../assets/images/tencent2.png",
+              alt: "Tencent 2025 Light Public-Welfare Creator Camp Outstanding Project image 2",
+            },
           ],
         },
       ],
@@ -334,106 +382,29 @@ export const profile = {
           title: "Shopee",
           org: "AI Product Manager Intern, Search and Recommendation AIGC Video",
           logo: "../assets/logo/shopee.png",
-          groups: [
-            {
-              title: "Automated editing workflow for high-performing short videos",
-              bullets: [
-                "Researched automated video-editing product pipelines, including TT-ads generate and Jianying marketing-video workflows.",
-                "Built a text-only front-end video demo to validate the feasibility of a video-agent workflow.",
-              ],
-            },
-          ],
         },
         {
           period: "2025.5 - 2025.10",
           title: "ByteDance",
           org: "AI Product Manager Intern, Data-speech, Doubao end-to-end voice call model",
           logo: "../assets/logo/baytedance.png",
-          groups: [
-            {
-              title: "Evaluation strategy and automated evaluation",
-              bullets: [
-                "Designed and revised evaluation sets for intelligence, emotional intelligence, and persona hallucination by reading papers, referencing open-source datasets, and turning evaluation criteria into standardized test items and automated-evaluation prompts.",
-                "Used Python to automatically score fixed evaluation-set outputs and summarize score, label, and reason fields for issue diagnosis and analysis.",
-              ],
-            },
-            {
-              title: "Prompt engineering workflow demo",
-              bullets: [
-                "Built a personalized emotional-companion profile-generation workflow that extracts user information and preferences to create RAG data for personalized dialogue.",
-                "Used two LLMs for role-play data generation, producing high-quality positive and negative examples for targeted RL training and refining PK selection logic.",
-              ],
-            },
-            {
-              title: "Learning and tutoring mode design",
-              bullets: [
-                "Benchmarked GPT-study, Gemini-study LearnLM, Asksia, miyagilabs, ElevenLabs, and educational companion hardware.",
-                "Defined a three-level product goal: effective knowledge explanation, guided user thinking, and a longer-term multimodal text-and-image solution.",
-              ],
-            },
-          ],
         },
         {
           period: "2023.10 - 2024.4",
-          title: "Momenta",
+          title: "Momenta Autonomous Driving Technology",
           org: "AI Product Manager Intern",
           logo: "../assets/logo/momenta.png",
-          groups: [
-            {
-              title: "Autonomous-driving feature development: obstacle avoidance at intersections",
-              bullets: [
-                "Analyzed real driving data to study vehicle speed and timing parameters, summarizing movement patterns for the target scenario.",
-                "Wrote algorithm rules based on scenario patterns to guide large-scale data annotation, review annotation quality, and coordinate with algorithm engineers for scenario-specific AI model training.",
-              ],
-            },
-            {
-              title: "General Motors autonomous-driving software production project in China",
-              bullets: [
-                "Worked on customized HMI feature design for autonomous-driving mode switching, mapping customer requirements and hardware constraints to physical-button interaction flows.",
-              ],
-            },
-          ],
-        },
-        {
-          period: "2023.5 - 2023.9",
-          title: "PINLAN AI Technology",
-          org: "AI Product Manager Intern",
-          groups: [
-            {
-              title:
-                "Tsinghua AIGC sports-architecture generation system; AI store-design and construction-drawing system",
-              bullets: [
-                "Mapped system architecture and user-experience flows, integrated pretrained machine-learning models into product concepts, and created web prototypes and interaction animations in Figma.",
-                "Wrote PRDs and user cases in Yuque, explained requirements to front-end, back-end, and algorithm teams, and iterated product logic with the team.",
-              ],
-            },
-          ],
         },
       ],
-      skills: [
+      publicService: [
         {
-          title: "AI and Agents",
-          items: ["ChatGPT", "Gemini", "DeepSeek", "LLM workflow", "prompt engineering", "RAG"],
+          period: "2020.11",
+          title: "West Bund Museum Art Education Guide Volunteer",
         },
         {
-          title: "Coding",
-          items: ["React Native Web", "JavaScript", "Python", "SQL", "front-end prototyping"],
+          period: "2021.7",
+          title: "\"Little Trees Slowly Grow Up\" Teaching Activity in Longyan, Fujian",
         },
-        {
-          title: "HCI Research",
-          items: ["interviews", "surveys", "usability testing", "thematic analysis", "mixed methods"],
-        },
-        {
-          title: "Design",
-          items: ["Figma", "interaction design", "visual communication", "academic posters and figures"],
-        },
-      ],
-      honorsTitle: "Honors",
-      honors: [
-        "Outstanding Graduate of East China Normal University",
-        "Special-class Scholarship of East China Normal University",
-        "Principal Investigator of a National Innovation and Entrepreneurship Training Program",
-        "Third Prize in the university-level e-commerce innovation and entrepreneurship competition",
       ],
     },
   },
