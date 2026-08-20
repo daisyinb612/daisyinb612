@@ -61,12 +61,13 @@ export const profile = {
       ],
       publications: [
         {
-          tag: "CCF-A / UbiComp Workshop (Submitted)",
+          tag: "CCF-A / UbiComp/ISWC 2026 Workshop (Accepted)",
           title:
             "BrickBuddy: A Step-Situated Wearable Agent for Knowledge Exploration During Brick Assembly",
           authors: "Xuejiao Ma, Ruijia Li, Bo Jiang",
-          venue: "Submitted to UbiComp Workshop",
-          status: "Workshop submission",
+          venue:
+            "WearAgent 2026: The 1st International Workshop on Interactive AI for Personal Wearable Agents",
+          status: "Accepted at the UbiComp/ISWC 2026 WearAgent Workshop",
           image: "../assets/images/Ubicomp.jpg",
           imageAlt: "BrickBuddy UbiComp Workshop preview",
           links: [
@@ -263,12 +264,13 @@ export const profile = {
       ],
       publications: [
         {
-          tag: "CCF-A / UbiComp Workshop (Submitted)",
+          tag: "CCF-A / UbiComp/ISWC 2026 Workshop (Accepted)",
           title:
             "BrickBuddy: A Step-Situated Wearable Agent for Knowledge Exploration During Brick Assembly",
           authors: "Xuejiao Ma, Ruijia Li, Bo Jiang",
-          venue: "Submitted to UbiComp Workshop",
-          status: "Workshop submission",
+          venue:
+            "WearAgent 2026: The 1st International Workshop on Interactive AI for Personal Wearable Agents",
+          status: "Accepted at the UbiComp/ISWC 2026 WearAgent Workshop",
           image: "../assets/images/Ubicomp.jpg",
           imageAlt: "BrickBuddy UbiComp Workshop preview",
           links: [
