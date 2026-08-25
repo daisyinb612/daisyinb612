@@ -12,29 +12,34 @@ export const profile = {
       languageLabel: "中文",
       switchLabel: "English",
       siteTitle: "马雪娇",
+      homeLabel: "返回关于我",
+      emailLabel: "邮箱",
       name: "马雪娇",
-      englishName: "Maxuejiao",
+      englishName: "Xuejiao Ma",
       role: "Incoming Ph.D. Student",
       affiliation: "华东师范大学",
       lab: "计算机科学与技术",
       location: "上海，中国",
       nav: [
         { id: "about", label: "关于我" },
-        { id: "education", label: "教育经历" },
         { id: "publications", label: "论文" },
-        { id: "innovation", label: "科创经历" },
-        { id: "publicService", label: "公益实践" },
+        { id: "experience", label: "实习经历" },
+        { id: "education", label: "教育经历" },
+        { id: "publicService", label: "奖项" },
       ],
       headings: {
         about: "关于我",
         education: "教育经历",
         publications: "论文",
-        innovation: "科创经历",
         experience: "实习经历",
-        publicService: "公益实践",
+        publicService: "奖项",
       },
+      featuredHeading: "研究项目",
+      openWorkLabel: "查看项目",
+      expandImageLabel: "点击放大",
+      closeImageLabel: "关闭大图",
       bio:
-        "我即将于 2026 年 9 月继续在华东师范大学上海人工智能教育研究院攻读人机交互博士，关注非正式学习场景。此前，我曾在字节跳动和虾皮担任 AI 产品经理实习生，支持AI模型训练和产品的工作。我希望持续探索和实践 AI-native 产品，在生活与学习场景，让人能够与智能体共同协作和成长。",
+        "我即将于 2026 年 9 月继续在华东师范大学上海人工智能教育研究院攻读人机交互博士，关注非正式学习场景。此前，我曾在字节跳动和虾皮担任 AI 产品经理，支持 AI 模型训练和产品工作。我希望持续探索和实践 AI-native 产品，在生活与学习场景，探索智能体如何成为更自然、可控的协作伙伴。",
       interests: [
         "Human-Agent Interaction",
         "Agent Support for Informal Learning",
@@ -61,7 +66,7 @@ export const profile = {
       ],
       publications: [
         {
-          tag: "CCF-A / UbiComp/ISWC 2026 Workshop (Accepted)",
+          tags: ["CCF-A", "UbiComp/ISWC 2026 Workshop", "Informal Learning"],
           title:
             "BrickBuddy: A Step-Situated Wearable Agent for Knowledge Exploration During Brick Assembly",
           authors: "Xuejiao Ma, Ruijia Li, Bo Jiang",
@@ -86,7 +91,7 @@ export const profile = {
           ],
         },
         {
-          tag: "CCF-A / CHI EA 2026",
+          tags: ["CCF-A", "2026 CHI EA", "Informal Learning"],
           title:
             "CO-OPERA: Designing an AI System for Middle School Teachers to Co-Create Social Awareness Drama Scripts",
           authors: "Xuejiao Ma, Min Fan, Bo Jiang, Jiatong Wang, Yuyang He",
@@ -120,7 +125,7 @@ export const profile = {
           ],
         },
         {
-          tag: "CCF-A / TOG 2026",
+          tags: ["CCF-A", "TOG", "SCI Q1", "Digital Fabrication"],
           title:
             "FreeShell: A Context-Free 4D Printing Technique for Fabricating Complex 3D Triangle Mesh Shells",
           authors: "Chao Yuan, Shengqi Dang, Xuejiao Ma, Nan Cao",
@@ -150,11 +155,22 @@ export const profile = {
           ],
         },
       ],
-      innovation: [
+      publicService: [
         {
           period: "2026",
-          title: "抖音创变者计划2026上海松江赛区交流赛金奖&游园会之星",
-          subtitle: "[这次一定]运用搭搭agent的轻量化社交出行产品",
+          title:
+            "抖音创变者计划2026总决赛入选项目 上海松江赛区交流赛金奖&游园会之星",
+          funding: "¥30,000",
+          versions: [
+            {
+              label: "V2",
+              title: "[牛马出来耍]-基于下班状态推荐出行方案的地图小程序",
+            },
+            {
+              label: "V1",
+              title: "[这次一定]-轻量社交出行地图",
+            },
+          ],
           images: [
             {
               src: "../assets/images/douyin1.jpg?v=20260705-jpeg",
@@ -164,12 +180,18 @@ export const profile = {
               src: "../assets/images/douyin2.jpg?v=20260705-jpeg",
               alt: "抖音创变者计划2026 上海松江赛区交流赛金奖现场图 2",
             },
+            {
+              src: "../assets/images/douyinmicroapp.JPG",
+              alt: "牛马出来耍抖音小程序码，可扫码体验",
+              scannable: true,
+            },
           ],
         },
         {
           period: "2025",
           title: "腾讯 2025 Light 公益创造营年度优秀项目",
           subtitle: "CO-OPERA:人与人工智能协作式的青少年心理戏剧模拟平台",
+          funding: "¥50,000",
           images: [
             {
               src: "../assets/images/tencent1.png",
@@ -181,35 +203,49 @@ export const profile = {
             },
           ],
         },
+        {
+          period: "2024",
+          title: "华东师范大学优秀毕业生",
+        },
       ],
       experience: [
         {
+          type: "Industry",
           period: "2025.11 - 2026.2",
           title: "虾皮 Shopee",
-          org: "AI 产品经理实习生（搜推-AIGC-video）",
+          role: "AI 产品经理",
+          department: "搜推 · AIGC Video",
           logo: "../assets/logo/shopee.png",
         },
         {
+          type: "Industry",
           period: "2025.5 - 2025.10",
           title: "字节跳动",
-          org: "AI 产品经理实习生（Data-speech，豆包端到端语音通话模型）",
+          role: "AI 产品经理",
+          department: "Data-speech · 豆包端到端语音通话模型",
           logo: "../assets/logo/baytedance.png",
         },
         {
+          type: "Academia",
+          period: "2024.12 - 2025.4",
+          title: "Neurobo (invested by MiraclePlus) & Tsinghua University",
+          labLink: { label: "MiLab", url: "https://www.milab.design/" },
+          role: "Full-stack iOS Developer",
+        },
+        {
+          type: "Academia",
+          period: "2024.1 - 2024.8",
+          title: "Tongji",
+          labLink: { label: "IDVx Lab", url: "https://idvxlab.com/" },
+          labFullName: "Intelligent Big Data Visualization Lab",
+          role: "Research Intern",
+        },
+        {
+          type: "Industry",
           period: "2023.10 - 2024.4",
-          title: "Momenta 自动驾驶科技公司",
-          org: "AI 产品经理实习生",
+          title: "Momenta",
+          role: "AI 产品经理",
           logo: "../assets/logo/momenta.png",
-        },
-      ],
-      publicService: [
-        {
-          period: "2020.11",
-          title: "西岸美术馆艺术教育导览志愿者",
-        },
-        {
-          period: "2021.7",
-          title: "“小树慢慢长大”福建龙岩支教活动",
         },
       ],
     },
@@ -217,6 +253,8 @@ export const profile = {
       languageLabel: "English",
       switchLabel: "中文",
       siteTitle: "Xuejiao Ma",
+      homeLabel: "Back to About",
+      emailLabel: "Email",
       name: "Xuejiao Ma",
       englishName: "Maxuejiao",
       role: "Incoming Ph.D. Student",
@@ -225,21 +263,24 @@ export const profile = {
       location: "Shanghai, China",
       nav: [
         { id: "about", label: "About" },
-        { id: "education", label: "Education" },
         { id: "publications", label: "Publications" },
-        { id: "innovation", label: "Innovation" },
-        { id: "publicService", label: "Public Service" },
+        { id: "experience", label: "Internship" },
+        { id: "education", label: "Education" },
+        { id: "publicService", label: "Awards" },
       ],
       headings: {
         about: "About",
         education: "Education",
         publications: "Publications",
-        innovation: "Innovation",
-        experience: "Internship Experience",
-        publicService: "Public Service",
+        experience: "Internship",
+        publicService: "Awards",
       },
+      featuredHeading: "Research Projects",
+      openWorkLabel: "Open project",
+      expandImageLabel: "Enlarge image",
+      closeImageLabel: "Close image",
       bio:
-        "Starting in September 2026, I will continue as a Ph.D. student in Human-Computer Interaction at the Shanghai Institute of AI for Education, East China Normal University, focusing on informal learning contexts. Previously, I interned as an AI Product Manager at ByteDance and Shopee, supporting AI model training and product work. I hope to continue exploring and practicing AI-native products so that, in everyday life and learning scenarios, people can collaborate and grow with agents more naturally and with greater control.",
+        "Hi, I am **Xuejiao Ma**(马雪娇，aka Daisy Ma), an incoming Ph.D. student in **Computer Science and Technology** at East China Normal University, advised by [Prof. Bo Jiang](https://faculty.ecnu.edu.cn/_s8/jb2/main.psp) at the SAIL Lab.\nMy research focuses on **Human–Agent Collaboration** and **AI for Education**, particularly in the context of **informal learning**. I hope to continue exploring and developing AI-native products while investigating how agents can become more effective and controllable collaborators in everyday life and learning.",
       interests: [
         "Human-Agent Interaction",
         "Agent Support for Informal Learning",
@@ -264,7 +305,7 @@ export const profile = {
       ],
       publications: [
         {
-          tag: "CCF-A / UbiComp/ISWC 2026 Workshop (Accepted)",
+          tags: ["CCF-A", "UbiComp/ISWC 2026 Workshop", "Informal Learning"],
           title:
             "BrickBuddy: A Step-Situated Wearable Agent for Knowledge Exploration During Brick Assembly",
           authors: "Xuejiao Ma, Ruijia Li, Bo Jiang",
@@ -286,7 +327,7 @@ export const profile = {
           bullets: [],
         },
         {
-          tag: "CCF-A / CHI EA 2026",
+          tags: ["CCF-A", "2026 CHI EA", "Informal Learning"],
           title:
             "CO-OPERA: Designing an AI System for Middle School Teachers to Co-Create Social Awareness Drama Scripts",
           authors: "Xuejiao Ma, Min Fan, Bo Jiang, Jiatong Wang, Yuyang He",
@@ -316,7 +357,7 @@ export const profile = {
           bullets: [],
         },
         {
-          tag: "CCF-A / TOG 2026",
+          tags: ["CCF-A", "TOG", "SCI Q1", "Digital Fabrication"],
           title:
             "FreeShell: A Context-Free 4D Printing Technique for Fabricating Complex 3D Triangle Mesh Shells",
           authors: "Chao Yuan, Shengqi Dang, Xuejiao Ma, Nan Cao",
@@ -343,69 +384,98 @@ export const profile = {
           bullets: [],
         },
       ],
-      innovation: [
+      publicService: [
         {
           period: "2026",
-          title:
-            "Douyin Change-maker Program 2026 Shanghai Songjiang Regional Exchange Gold Award & Fair Star",
-          subtitle:
-            "[This Time for Sure] A lightweight social travel product powered by Dada Agent",
+          title: "2026 Douyin Hackathon Finalist Projects",
+          funding: "¥30,000",
+          versions: [
+            {
+              label: "V2",
+              title:
+                "[NiuMaGo] — A map mini app that recommends outings based on users’ after-work state",
+            },
+            {
+              label: "V1",
+              title: "[This Time for Sure] — A lightweight social travel map",
+            },
+          ],
           images: [
             {
               src: "../assets/images/douyin1.jpg?v=20260705-jpeg",
-              alt: "Douyin Change-maker Program 2026 Shanghai Songjiang Gold Award image 1",
+              alt: "2026 Douyin Hackathon Finalist Projects image 1",
             },
             {
               src: "../assets/images/douyin2.jpg?v=20260705-jpeg",
-              alt: "Douyin Change-maker Program 2026 Shanghai Songjiang Gold Award image 2",
+              alt: "2026 Douyin Hackathon Finalist Projects image 2",
+            },
+            {
+              src: "../assets/images/douyinmicroapp.JPG",
+              alt: "NiuMaGo Douyin mini app code for scanning and trying the product",
+              scannable: true,
             },
           ],
         },
         {
           period: "2025",
-          title: "Tencent 2025 Light Public-Welfare Creator Camp Annual Outstanding Project",
+          title: "Tencent 2025 Light Welfare Camp Annual Outstanding Project",
           subtitle:
             "CO-OPERA: A Human-AI Collaborative Psychodrama Simulation Platform for Adolescents",
+          funding: "¥50,000",
           images: [
             {
               src: "../assets/images/tencent1.png",
-              alt: "Tencent 2025 Light Public-Welfare Creator Camp Outstanding Project image 1",
+              alt: "Tencent 2025 Light Welfare Camp Annual Outstanding Project image 1",
             },
             {
               src: "../assets/images/tencent2.png",
-              alt: "Tencent 2025 Light Public-Welfare Creator Camp Outstanding Project image 2",
+              alt: "Tencent 2025 Light Welfare Camp Annual Outstanding Project image 2",
             },
           ],
+        },
+        {
+          period: "2024",
+          title: "Outstanding Graduate of East China Normal University",
         },
       ],
       experience: [
         {
+          type: "Industry",
           period: "2025.11 - 2026.2",
           title: "Shopee",
-          org: "AI Product Manager Intern, Search and Recommendation AIGC Video",
+          role: "AI Product Manager",
+          department: "Search and Recommendation · AIGC Video",
           logo: "../assets/logo/shopee.png",
         },
         {
+          type: "Industry",
           period: "2025.5 - 2025.10",
           title: "ByteDance",
-          org: "AI Product Manager Intern, Data-speech, Doubao end-to-end voice call model",
+          role: "AI Product Manager",
+          department: "Data-speech · Doubao end-to-end voice call model",
           logo: "../assets/logo/baytedance.png",
         },
         {
+          type: "Academia",
+          period: "2024.12 - 2025.4",
+          title: "Neurobo (invested by MiraclePlus) & Tsinghua University",
+          labLink: { label: "MiLab", url: "https://www.milab.design/" },
+          role: "Full-stack iOS Developer",
+        },
+        {
+          type: "Academia",
+          period: "2024.1 - 2024.8",
+          title: "Tongji",
+          labLink: { label: "IDVx Lab", url: "https://idvxlab.com/" },
+          labFullName: "Intelligent Big Data Visualization Lab",
+          role: "Research Intern",
+        },
+        {
+          type: "Industry",
           period: "2023.10 - 2024.4",
-          title: "Momenta Autonomous Driving Technology",
-          org: "AI Product Manager Intern",
+          title: "Momenta",
+          role: "AI Product Manager",
           logo: "../assets/logo/momenta.png",
-        },
-      ],
-      publicService: [
-        {
-          period: "2020.11",
-          title: "West Bund Museum Art Education Guide Volunteer",
-        },
-        {
-          period: "2021.7",
-          title: "\"Little Trees Slowly Grow Up\" Teaching Activity in Longyan, Fujian",
         },
       ],
     },
