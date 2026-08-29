@@ -12,7 +12,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { profile } from "./profile.js?v=20260826-funding-symbol";
+import { profile } from "./profile.js?v=20260829-advisor-details";
 
 const html = htm.bind(React.createElement);
 const avatarImage = new URL("../assets/profile-avatar.jpg", import.meta.url).href;
@@ -126,50 +126,66 @@ function TopNav({ activeSection, compact, language, onNavigate, onToggleLanguage
               },
             )}
           </${View}>
-          <${Pressable}
-            accessibilityLabel=${`Switch language from ${language}`}
-            accessibilityRole="button"
-            onPress=${onToggleLanguage}
-            style=${styles.languageToggle}
-          >
-            <${Text} style=${styles.languageText}>${t.switchLabel}</${Text}>
-          </${Pressable}>
+          ${profile.common.showLanguageToggle
+            ? html`
+                <${Pressable}
+                  accessibilityLabel=${`Switch language from ${language}`}
+                  accessibilityRole="button"
+                  onPress=${onToggleLanguage}
+                  style=${styles.languageToggle}
+                >
+                  <${Text} style=${styles.languageText}>${t.switchLabel}</${Text}>
+                </${Pressable}>
+              `
+            : null}
         </${View}>
       </${View}>
     </${View}>
   `;
 }
 
-function Sidebar({ compact, phone, t }) {
+function ProfileOverview({ language, phone, t }) {
   return html`
-    <${View} style=${[styles.sidebar, compact ? styles.sidebarCompact : null]}>
-      <${View} style=${[styles.avatarWrap, phone ? styles.avatarWrapPhone : null]}>
-        <${Image}
-          accessibilityLabel=${profile.common.avatarAlt}
-          resizeMode="cover"
-          source=${{ uri: avatarImage }}
-          style=${styles.avatar}
+    <${View} style=${[styles.profileOverview, phone ? styles.profileOverviewPhone : null]}>
+      <${View} style=${[styles.profileIdentityPanel, phone ? styles.profileIdentityPanelPhone : null]}>
+        <${View} style=${[styles.avatarWrap, phone ? styles.avatarWrapPhone : null]}>
+          <${Image}
+            accessibilityLabel=${profile.common.avatarAlt}
+            resizeMode="cover"
+            source=${{ uri: avatarImage }}
+            style=${styles.avatar}
+          />
+        </${View}>
+        <${View} style=${styles.authorBlock}>
+          <${Text} style=${styles.authorName}>${t.name}</${Text}>
+          <${Text} style=${styles.authorBio}>${t.affiliation}</${Text}>
+          <${Text} style=${styles.authorBio}>${t.lab}</${Text}>
+        </${View}>
+        <${View} style=${styles.contactList}>
+          <${Text} style=${styles.contactText}>${t.location}</${Text}>
+          <${Text} style=${styles.contactText}>${profile.common.email}</${Text}>
+          <${View} style=${styles.socialIconRow}>
+            <${IconLink} label="Google Scholar" source=${scholarIcon} url=${profile.common.scholar} />
+            <${IconLink} label="GitHub" source=${githubIcon} url=${profile.common.github} />
+          </${View}>
+        </${View}>
+      </${View}>
+      <${View} style=${[styles.profileBioBlock, phone ? styles.profileBioBlockPhone : null]}>
+        <${RichBio}
+          value=${t.bio}
+          style=${[
+            styles.leadText,
+            language === "en" ? styles.englishLeadText : null,
+          ]}
         />
-      </${View}>
-      <${View} style=${styles.authorBlock}>
-        <${Text} style=${styles.authorName}>${t.name}</${Text}>
-        <${Text} style=${styles.authorRole}>${t.role}</${Text}>
-        <${Text} style=${styles.authorBio}>${t.affiliation}</${Text}>
-        <${Text} style=${styles.authorBio}>${t.lab}</${Text}>
-      </${View}>
-      <${View} style=${styles.contactList}>
-        <${Text} style=${styles.contactText}>${t.location}</${Text}>
-        <${Pressable}
-          accessibilityLabel=${`${t.emailLabel}: ${profile.common.email}`}
-          accessibilityRole="link"
-          onPress=${() => openUrl(`mailto:${profile.common.email}`)}
-        >
-          <${Text} style=${styles.contactLink}>${profile.common.email}</${Text}>
-        </${Pressable}>
-        <${Text} style=${styles.contactText}>${profile.common.phone}</${Text}>
-        <${View} style=${styles.socialIconRow}>
-          <${IconLink} label="Google Scholar" source=${scholarIcon} url=${profile.common.scholar} />
-          <${IconLink} label="GitHub" source=${githubIcon} url=${profile.common.github} />
+        <${View} style=${styles.interestWrap}>
+          ${toList(t.interests).map(
+            (interest) => html`
+              <${View} key=${interest} style=${styles.interestPill}>
+                <${Text} style=${styles.interestText}>${interest}</${Text}>
+              </${View}>
+            `,
+          )}
         </${View}>
       </${View}>
     </${View}>
@@ -383,6 +399,9 @@ function DetailGroups({ item }) {
 
 function ExperienceItem({ item, isLast, phone }) {
   const logoImage = item.logo ? assetUrl(item.logo) : null;
+  const periodParts = String(item.period || "").split(/\s*-\s*/);
+  const periodLabel =
+    periodParts.length === 2 ? `${periodParts[0]}\n-\n${periodParts[1]}` : item.period;
 
   return html`
     <${View} style=${[styles.experienceTimelineRow, phone ? styles.experienceTimelineRowPhone : null]}>
@@ -393,7 +412,10 @@ function ExperienceItem({ item, isLast, phone }) {
               <${View} style=${styles.experienceTypeBadge}>
                 <${Text} style=${styles.experienceTypeText}>${item.type || "Industry"}</${Text}>
               </${View}>
-              <${Text} style=${styles.experienceRailPeriod}>${item.period}</${Text}>
+              <${Text}
+                accessibilityLabel=${item.period}
+                style=${styles.experienceRailPeriod}
+              >${periodLabel}</${Text}>
             `}
         <${View} style=${[styles.experienceDot, phone ? styles.experienceDotPhone : null]} />
         ${isLast
@@ -446,6 +468,9 @@ function ExperienceItem({ item, isLast, phone }) {
               ? html`
                   <${Text} style=${styles.experienceDepartment}>${item.department}</${Text}>
                 `
+              : null}
+            ${item.advisor
+              ? html`<${Text} style=${styles.experienceAdvisor}>${item.advisor}</${Text}>`
               : null}
           </${View}>
         </${View}>
@@ -592,7 +617,6 @@ export function App() {
   const [activeSection, setActiveSection] = React.useState("about");
   const compact = width < 900;
   const phone = width < 620;
-  const desktopLeftPadding = Math.max(24, (width - 1160) / 2 + 24);
   const t = profile.locales[language];
   const toggleLanguage = () => setLanguage((current) => (current === "zh" ? "en" : "zh"));
   const navigateToSection = (id) => {
@@ -612,22 +636,7 @@ export function App() {
         id="about"
         title=${t.headings.about}
       >
-        <${RichBio}
-          value=${t.bio}
-          style=${[
-            styles.leadText,
-            language === "en" ? styles.englishLeadText : null,
-          ]}
-        />
-        <${View} style=${styles.interestWrap}>
-          ${toList(t.interests).map(
-            (interest) => html`
-              <${View} key=${interest} style=${styles.interestPill}>
-                <${Text} style=${styles.interestText}>${interest}</${Text}>
-              </${View}>
-            `,
-          )}
-        </${View}>
+        <${ProfileOverview} language=${language} phone=${phone} t=${t} />
         <${FeaturedWork} items=${t.publications} phone=${phone} t=${t} />
       </${Section}>
 
@@ -664,10 +673,7 @@ export function App() {
   `;
 
   return html`
-    <${View}
-      dataSet=${{ language }}
-      style=${[styles.app, compact ? null : styles.appDesktop]}
-    >
+    <${View} dataSet=${{ language }} style=${styles.app}>
       <${TopNav}
         activeSection=${activeSection}
         compact=${compact}
@@ -676,29 +682,9 @@ export function App() {
         onToggleLanguage=${toggleLanguage}
         t=${t}
       />
-      ${compact
-        ? html`
-            <${ScrollView} style=${styles.scroll} contentContainerStyle=${styles.page}>
-              <${View} style=${[styles.layout, styles.layoutCompact]}>
-                <${Sidebar} compact=${true} phone=${phone} t=${t} />
-                ${sections}
-              </${View}>
-            </${ScrollView}>
-          `
-        : html`
-            <${View} style=${[styles.desktopLayout, { paddingLeft: desktopLeftPadding }]}>
-              <${View} style=${styles.sidebarColumn}>
-                <${Sidebar} compact=${false} phone=${false} t=${t} />
-              </${View}>
-              <${ScrollView}
-                dataSet=${{ contentScroll: "true" }}
-                style=${styles.articleScroll}
-                contentContainerStyle=${styles.articleScrollContent}
-              >
-                ${sections}
-              </${ScrollView}>
-            </${View}>
-          `}
+      <${ScrollView} style=${styles.scroll} contentContainerStyle=${styles.page}>
+        <${View} style=${styles.layout}>${sections}</${View}>
+      </${ScrollView}>
     </${View}>
   `;
 }
@@ -716,6 +702,7 @@ const colors = {
   page: "#ffffff",
   pill: "#e7fffc",
   accentSoft: "#f1fffd",
+  profileSoft: "#f8fcfc",
 };
 
 const styles = StyleSheet.create({
@@ -723,12 +710,8 @@ const styles = StyleSheet.create({
     minHeight: "100vh",
     backgroundColor: colors.background,
   },
-  appDesktop: {
-    height: "100vh",
-    overflow: "hidden",
-  },
   scroll: {
-    minHeight: "100vh",
+    flex: 1,
   },
   masthead: {
     width: "100%",
@@ -826,58 +809,43 @@ const styles = StyleSheet.create({
   },
   layout: {
     width: "100%",
-    maxWidth: 1160,
+    maxWidth: 1040,
     marginHorizontal: "auto",
     paddingHorizontal: 24,
     paddingTop: 36,
+  },
+  profileOverview: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "flex-start",
-    gap: 42,
+    gap: 28,
+    paddingHorizontal: 28,
+    paddingVertical: 26,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 12,
+    backgroundColor: colors.profileSoft,
   },
-  desktopLayout: {
-    width: "100%",
-    flex: 1,
-    minHeight: 0,
-    flexDirection: "row",
-    alignItems: "stretch",
-    gap: 42,
-  },
-  sidebarColumn: {
-    width: 235,
-    flexShrink: 0,
-    paddingTop: 54,
-  },
-  articleScroll: {
-    flex: 1,
-    minWidth: 0,
-    minHeight: 0,
-  },
-  articleScrollContent: {
-    paddingTop: 36,
-    paddingBottom: 70,
-  },
-  layoutCompact: {
+  profileOverviewPhone: {
     flexDirection: "column",
-    gap: 24,
+    gap: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 22,
   },
-  sidebar: {
-    width: 235,
-    position: "sticky",
-    top: 24,
-  },
-  sidebarCompact: {
-    width: "100%",
-    position: "relative",
-    top: 0,
-    flexDirection: "row",
-    flexWrap: "wrap",
+  profileIdentityPanel: {
+    width: 218,
+    flexShrink: 0,
     alignItems: "center",
-    gap: 18,
+    gap: 14,
+  },
+  profileIdentityPanelPhone: {
+    width: "100%",
   },
   avatarWrap: {
-    width: 168,
-    height: 168,
-    borderRadius: 84,
+    width: 144,
+    height: 144,
+    borderRadius: 72,
+    flexShrink: 0,
     overflow: "hidden",
     borderWidth: 1,
     borderColor: colors.border,
@@ -896,40 +864,33 @@ const styles = StyleSheet.create({
     borderRadius: 80,
   },
   authorBlock: {
-    marginTop: 14,
+    width: "100%",
+    alignItems: "center",
     gap: 4,
   },
   authorName: {
     color: colors.text,
-    fontSize: 22,
-    lineHeight: 29,
+    fontSize: 19,
+    lineHeight: 26,
     fontWeight: "700",
-  },
-  authorRole: {
-    color: colors.text,
-    fontSize: 14,
-    lineHeight: 21,
-    fontWeight: "600",
+    textAlign: "center",
   },
   authorBio: {
     color: colors.lightText,
     fontSize: 13,
     lineHeight: 20,
+    textAlign: "center",
   },
   contactList: {
-    marginTop: 18,
+    width: "100%",
+    alignItems: "center",
     gap: 7,
   },
   contactText: {
     color: colors.lightText,
     fontSize: 13,
     lineHeight: 19,
-  },
-  contactLink: {
-    color: colors.link,
-    fontSize: 13,
-    lineHeight: 19,
-    textDecorationLine: "underline",
+    textAlign: "center",
   },
   socialIconRow: {
     flexDirection: "row",
@@ -952,9 +913,23 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  article: {
+  profileBioBlock: {
     flex: 1,
-    maxWidth: 820,
+    minWidth: 0,
+    paddingLeft: 28,
+    borderLeftWidth: 1,
+    borderTopColor: colors.border,
+    borderLeftColor: colors.border,
+  },
+  profileBioBlockPhone: {
+    width: "100%",
+    paddingLeft: 0,
+    paddingTop: 20,
+    borderLeftWidth: 0,
+    borderTopWidth: 1,
+  },
+  article: {
+    width: "100%",
     minWidth: 0,
   },
   section: {
@@ -1013,7 +988,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
-    marginTop: 18,
+    marginTop: 28,
   },
   interestPill: {
     backgroundColor: colors.pill,
@@ -1222,6 +1197,13 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   experienceDepartment: {
+    color: colors.lightText,
+    fontSize: 14,
+    lineHeight: 21,
+    marginTop: 2,
+    fontWeight: "400",
+  },
+  experienceAdvisor: {
     color: colors.lightText,
     fontSize: 14,
     lineHeight: 21,

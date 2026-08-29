@@ -2,10 +2,10 @@ export const profile = {
   common: {
     avatarAlt: "Maxuejiao portrait",
     email: "mxjinb612@gmail.com",
-    phone: "+86 134-7896-4303",
     homepage: "https://daisyinb612.github.io/",
     scholar: "https://scholar.google.com/citations?user=NiV3ahQAAAAJ&hl=en",
     github: "https://github.com/daisyinb612",
+    showLanguageToggle: false,
   },
   locales: {
     zh: {
@@ -16,7 +16,6 @@ export const profile = {
       emailLabel: "邮箱",
       name: "马雪娇",
       englishName: "Xuejiao Ma",
-      role: "Incoming Ph.D. Student",
       affiliation: "华东师范大学",
       lab: "计算机科学与技术",
       location: "上海，中国",
@@ -39,7 +38,7 @@ export const profile = {
       expandImageLabel: "点击放大",
       closeImageLabel: "关闭大图",
       bio:
-        "我即将于 2026 年 9 月继续在华东师范大学上海人工智能教育研究院攻读人机交互博士，关注非正式学习场景。此前，我曾在字节跳动和虾皮担任 AI 产品经理，支持 AI 模型训练和产品工作。我希望持续探索和实践 AI-native 产品，在生活与学习场景，探索智能体如何成为更自然、可控的协作伙伴。",
+        "我即将于 2026 年 9 月继续在华东师范大学上海人工智能教育研究院攻读人机交互博士，关注非正式学习场景。\n\n此前，我曾在字节跳动和虾皮担任 AI 产品经理，支持 AI 模型训练和产品工作。我希望持续探索和实践 AI-native 产品，在生活与学习场景，探索智能体如何成为更自然、可控的协作伙伴。",
       interests: [
         "Human-Agent Interaction",
         "Agent Support for Informal Learning",
@@ -231,6 +230,7 @@ export const profile = {
           title: "Neurobo (invested by MiraclePlus) & Tsinghua University",
           labLink: { label: "MiLab", url: "https://www.milab.design/" },
           role: "Full-stack iOS Developer",
+          advisor: "Advisor: Yijie Guo and Zhenhan Huang",
         },
         {
           type: "Academia",
@@ -239,6 +239,7 @@ export const profile = {
           labLink: { label: "IDVx Lab", url: "https://idvxlab.com/" },
           labFullName: "Intelligent Big Data Visualization Lab",
           role: "Research Intern",
+          advisor: "Advisor: Nan Cao and Guanhong Liu",
         },
         {
           type: "Industry",
@@ -257,7 +258,6 @@ export const profile = {
       emailLabel: "Email",
       name: "Xuejiao Ma",
       englishName: "Maxuejiao",
-      role: "Incoming Ph.D. Student",
       affiliation: "East China Normal University",
       lab: "Computer Science and Technology",
       location: "Shanghai, China",
@@ -280,7 +280,7 @@ export const profile = {
       expandImageLabel: "Enlarge image",
       closeImageLabel: "Close image",
       bio:
-        "Hi, I am **Xuejiao Ma**(马雪娇，aka Daisy Ma), an incoming Ph.D. student in **Computer Science and Technology** at East China Normal University, advised by [Prof. Bo Jiang](https://faculty.ecnu.edu.cn/_s8/jb2/main.psp) at the SAIL Lab.\nMy research focuses on **Human–Agent Collaboration** and **AI for Education**, particularly in the context of **informal learning**. I hope to continue exploring and developing AI-native products while investigating how agents can become more effective and controllable collaborators in everyday life and learning.",
+        "Hi, I am **Xuejiao Ma**(马雪娇，aka Daisy Ma), an incoming Ph.D. student in **Computer Science and Technology** at East China Normal University, advised by [Prof. Bo Jiang](https://faculty.ecnu.edu.cn/_s8/jb2/main.psp) at the SAIL Lab.\n\nMy research focuses on **Human–Agent Collaboration** and **AI for Education**, particularly in the context of **informal learning**. I hope to continue exploring and developing AI-native products while investigating how agents can become more effective and controllable collaborators in everyday life and learning.",
       interests: [
         "Human-Agent Interaction",
         "Agent Support for Informal Learning",
@@ -461,6 +461,7 @@ export const profile = {
           title: "Neurobo (invested by MiraclePlus) & Tsinghua University",
           labLink: { label: "MiLab", url: "https://www.milab.design/" },
           role: "Full-stack iOS Developer",
+          advisor: "Advisor: Yijie Guo and Zhenhan Huang",
         },
         {
           type: "Academia",
@@ -469,6 +470,7 @@ export const profile = {
           labLink: { label: "IDVx Lab", url: "https://idvxlab.com/" },
           labFullName: "Intelligent Big Data Visualization Lab",
           role: "Research Intern",
+          advisor: "Advisor: Nan Cao and Guanhong Liu",
         },
         {
           type: "Industry",
